@@ -12,7 +12,7 @@ import pandas
 import os
 
 # Load Datasets
-dataframe = pandas.read_csv("Datasets.csv", header=None)
+dataframe = pandas.read_csv("Datasets_NewLabel.csv", header=None)
 dataset = dataframe.values
 
 # Seperate Dataset into input and output datasets
@@ -31,13 +31,13 @@ print("Output dataset", flat_set_of_output)
 # Encode All of input datasets words from string to number
 encoder_input = LabelEncoder()
 encoder_input.fit(flat_set_of_input_list)
-np.save("Model/Encoded_Input_classes.npy" , encoder_input.classes_) # Save Encoded Model
+np.save("Saved_Model/Encoded_Input_classes.npy" , encoder_input.classes_) # Save Encoded Model
 print("Encoder Input Classes :",encoder_input.classes_)
 
 # Encode All of output datasets words from string to number
 encoder_output = LabelEncoder()
 encoder_output.fit(flat_set_of_output)
-np.save("Model/Encoded_Output_classes.npy" , encoder_output.classes_) # Save Encoded Model
+np.save("Saved_Model/Encoded_Output_classes.npy" , encoder_output.classes_) # Save Encoded Model
 
 number_of_category = len(encoder_output.classes_)
 print("Encoder Output has", number_of_category, "Classes :",encoder_output.classes_)
@@ -57,14 +57,16 @@ np.random.seed(seed)
 X_train, X_test, y_train, y_test = train_test_split(encoded_train_x_datasets, encoded_train_y_datasets, test_size=0.2, random_state=seed)
 
 # ML Model Structure
-max_features = 500
+max_features = 2000
 model = Sequential()
 model.add(Embedding(max_features, max_word_lenght))
 model.add(LSTM(max_word_lenght, dropout=0.1, recurrent_dropout=0.1))
-model.add(Dense(max_word_lenght, activation='relu'))
 model.add(Dense(max_word_lenght, activation='sigmoid'))
-model.add(Dense(max_word_lenght, activation='sigmoid'))
-model.add(Dense(number_of_category, activation='sigmoid'))
+# model.add(Dense(max_word_lenght, activation='sigmoid'))
+# model.add(Dense(max_word_lenght, activation='sigmoid'))
+# model.add(Dense(max_word_lenght, activation='sigmoid'))
+# model.add(Dense(max_word_lenght, activation='sigmoid'))
+model.add(Dense(number_of_category, activation='softmax')) #softmax used for highlight the largest values and suppress values which are significantly below the maximum value
 
 model.compile(loss='categorical_crossentropy',
               optimizer='adam',
@@ -72,7 +74,7 @@ model.compile(loss='categorical_crossentropy',
 
 model.fit(X_train, y_train, validation_data=(X_test,y_test),
           batch_size=32,
-          epochs=100)
+          epochs=150)
 
 predictions = model.predict(X_test)
 pre = []
@@ -81,4 +83,4 @@ for x in predictions:
 # round predictions
 rounded = [round(x[0]) for x in predictions]
 print(predictions,pre)
-model.save('Model/model.h5')
+model.save('Saved_Model/model.h5')

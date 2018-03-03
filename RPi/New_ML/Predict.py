@@ -5,17 +5,17 @@ from keras.preprocessing import sequence
 import pandas
 import numpy as np
 
-dataframe = pandas.read_csv("Datasets.csv", header=None)
+dataframe = pandas.read_csv("Datasets_NewLabel.csv", header=None)
 dataset = dataframe.values
 
 
 encoder_input = LabelEncoder()
-encoder_input.classes_ = np.load('Model/Encoded_Input_classes.npy')
+encoder_input.classes_ = np.load('Saved_Model/Encoded_Input_classes.npy')
 
 encoder_output = LabelEncoder()
-encoder_output.classes_ = np.load('Model/Encoded_Output_classes.npy')
+encoder_output.classes_ = np.load('Saved_Model/Encoded_Output_classes.npy')
 
-model = load_model('Model/model.h5')
+model = load_model('Saved_Model/model.h5')
 
 def TransformInputData2EncodeValue(_input, _max_word_lenght=30):
     sentence = []
@@ -32,7 +32,7 @@ def TransformInputData2EncodeValue(_input, _max_word_lenght=30):
 
     return encoded_sentence
 
-words = word_tokenize("สวัสดีค่ะ ไม่ทราบว่าอาจารย์ชิตอยู่ไหมคะ", engine='deepcut')
+words = word_tokenize("จะติดต่อด๊อกเตอร์ได้ยังไง", engine='deepcut')
 encoded_sentence = TransformInputData2EncodeValue(words)
 
 # Predict output

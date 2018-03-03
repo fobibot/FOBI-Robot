@@ -66,7 +66,7 @@ model.add(Dense(max_word_lenght, activation='sigmoid'))
 model.add(Dense(max_word_lenght, activation='sigmoid'))
 model.add(Dense(number_of_category, activation='sigmoid'))
 
-model.compile(loss='binary_crossentropy',
+model.compile(loss='categorical_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
