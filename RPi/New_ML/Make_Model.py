@@ -62,10 +62,6 @@ model = Sequential()
 model.add(Embedding(max_features, max_word_lenght))
 model.add(LSTM(max_word_lenght, dropout=0.1, recurrent_dropout=0.1))
 model.add(Dense(max_word_lenght, activation='sigmoid'))
-# model.add(Dense(max_word_lenght, activation='sigmoid'))
-# model.add(Dense(max_word_lenght, activation='sigmoid'))
-# model.add(Dense(max_word_lenght, activation='sigmoid'))
-# model.add(Dense(max_word_lenght, activation='sigmoid'))
 model.add(Dense(number_of_category, activation='softmax')) #softmax used for highlight the largest values and suppress values which are significantly below the maximum value
 
 model.compile(loss='categorical_crossentropy',
@@ -74,7 +70,7 @@ model.compile(loss='categorical_crossentropy',
 
 model.fit(X_train, y_train, validation_data=(X_test,y_test),
           batch_size=32,
-          epochs=150)
+          epochs=100)
 
 predictions = model.predict(X_test)
 pre = []

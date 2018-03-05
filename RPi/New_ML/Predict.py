@@ -28,17 +28,18 @@ def TransformInputData2EncodeValue(_input, _max_word_lenght=30):
             pass
     
     encoded_sentence = sequence.pad_sequences([sentence], maxlen=_max_word_lenght)
-    print(encoded_sentence)
+    # print(encoded_sentence)
 
     return encoded_sentence
 
-words = word_tokenize("จะติดต่อด๊อกเตอร์ได้ยังไง", engine='deepcut')
-encoded_sentence = TransformInputData2EncodeValue(words)
+while 1:
+    words = word_tokenize(input("Sentence : "), engine='deepcut')
+    encoded_sentence = TransformInputData2EncodeValue(words)
 
-# Predict output
-predictions = model.predict(encoded_sentence).tolist()
-print(predictions)
-predicted = encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
-print(predicted)
+    # Predict output
+    predictions = model.predict(encoded_sentence).tolist()
+    # print(predictions)
+    predicted = encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
+    print(predicted)
 
 
