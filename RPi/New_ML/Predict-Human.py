@@ -10,12 +10,12 @@ dataset = dataframe.values
 
 
 encoder_input = LabelEncoder()
-encoder_input.classes_ = np.load('Saved_Model/Encoded_Input_classes.npy')
+encoder_input.classes_ = np.load('Saved_Model/Encoded_Input_classes-Human.npy')
 
 encoder_output = LabelEncoder()
-encoder_output.classes_ = np.load('Saved_Model/Encoded_Output_classes.npy')
+encoder_output.classes_ = np.load('Saved_Model/Encoded_Output_classes-Human.npy')
 
-model = load_model('Saved_Model/model.h5')
+model = load_model('Saved_Model/Human-model.h5')
 
 def TransformInputData2EncodeValue(_input, _max_word_lenght=30):
     sentence = []
@@ -32,7 +32,7 @@ def TransformInputData2EncodeValue(_input, _max_word_lenght=30):
 
     return encoded_sentence
 
-words = word_tokenize("ห้องน้ำอยู่ชั้นไหน", engine='deepcut')
+words = word_tokenize("อ.อยู่ชั้นไหน", engine='deepcut')
 encoded_sentence = TransformInputData2EncodeValue(words)
 
 # Predict output

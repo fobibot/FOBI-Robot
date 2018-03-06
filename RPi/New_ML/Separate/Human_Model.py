@@ -6,6 +6,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras.layers import Embedding
 from keras.layers import LSTM
+from keras import metrics
 from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas
@@ -61,14 +62,12 @@ max_features = 500
 model = Sequential()
 model.add(Embedding(max_features, max_word_lenght))
 model.add(LSTM(max_word_lenght, dropout=0.1, recurrent_dropout=0.1))
-model.add(Dense(max_word_lenght, activation='relu'))
-model.add(Dense(max_word_lenght, activation='sigmoid'))
-model.add(Dense(max_word_lenght, activation='sigmoid'))
 model.add(Dense(number_of_category, activation='sigmoid'))
+model.add(Dense(number_of_category, activation='softmax'))
 
 model.compile(loss='categorical_crossentropy',
               optimizer='adam',
-              metrics=['accuracy'])
+              metrics=[metrics.categorical_accuracy])
 
 model.fit(X_train, y_train, validation_data=(X_test,y_test),
           batch_size=32,
