@@ -19,7 +19,7 @@ dataset = dataframe.values
 input_dataset = []
 output_dataset = []
 for data in dataset:
-    input_dataset.append(word_tokenize(data[0], engine='deepcut'))
+    input_dataset.append(word_tokenize(data[0], engine='longest-matching'))
     output_dataset.append(data[1])
 print(input_dataset)
 flat_input_list = [item for sublist in input_dataset for item in sublist] # Convert list of list to list

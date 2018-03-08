@@ -4,6 +4,7 @@ from keras.models import load_model
 from keras.preprocessing import sequence
 import pandas
 import numpy as np
+import time as t
 
 dataframe = pandas.read_csv("Datasets_NewLabel.csv", header=None)
 dataset = dataframe.values
@@ -24,7 +25,7 @@ def TransformInputData2EncodeValue(_input, _max_word_lenght=30):
             temp = list(encoder_input.transform([word]))
             sentence += temp
         except ValueError:
-            print(("*"*10), "No", word, "in database", ("*"*10))
+            #print(("*"*10), "No", word, "in database", ("*"*10))
             pass
     
     encoded_sentence = sequence.pad_sequences([sentence], maxlen=_max_word_lenght)
@@ -32,14 +33,25 @@ def TransformInputData2EncodeValue(_input, _max_word_lenght=30):
 
     return encoded_sentence
 
+
 while 1:
-    words = word_tokenize(input("Sentence : "), engine='deepcut') #wait for input sentence by typing
+    sentence = input("Sentence : ")
+    last = t.time()
+    words = word_tokenize(sentence, engine='deepcut') #wait for input sentence by typing
+    print("Word Segmentation time :", t.time()-last)
+    
+    last = t.time()
     encoded_sentence = TransformInputData2EncodeValue(words)
+    print("Encode Data time :", t.time()-last)
 
     # Predict output
+    last = t.time()
     predictions = model.predict(encoded_sentence).tolist()
-    # print(predictions)
+    print("Predict time :", t.time()-last)
+    print(predictions)
+    last = t.time()
     predicted = encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
+    print("Decoded Predict time :", t.time()-last)
     print(predicted)
 
 
