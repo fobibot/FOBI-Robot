@@ -1,0 +1,5 @@
+install for pico2wave
+sudo apt-get install libttspico0 libttspico-utils libttspico-data
+
+install sox mp3 handler
+sudo apt-get install libsox-fmt-mp3
