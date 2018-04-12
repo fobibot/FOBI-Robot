@@ -29,15 +29,27 @@ while 1:
             sentence = [x for x in sentence if x != ' '] # remove all blank spaces
             print("Word cut sentence :", sentence)
             for i, word in enumerate(sentence):
-                if word in robot.title_names:
-                    _object = sentence[i+1]
-                    print("_object :", _object)
-                    break
-            if _object == None:
-                print("Cannot Detect Person")
-                _object = "No"
-
-            _place = "FBสามศูนย์ห้า" # edit to find in database next time
+            #     if word in robot.title_names: # found title names
+            #         print("_object :", _object)
+            #         break
+            # if _object == None: # Cannot Detect Person
+            #     print("Cannot Detect Person")
+            #     _object = "No"
+                if word in robot.title_names: # found title names
+                    try:
+                        _type, _object = robot.NameToKeyword[word]
+                        _object = sentence[i+1]
+                        try:
+                            _place = robot.PeopleInformation[_type][_object]["room"]
+                        except:
+                            print("Found some error in file \'PeopleInformation.json\'")
+                        break
+                    except:
+                        # _type = None
+                        _object = None
+                        _place = None
+                        print("Cannot Detect Person")
+                        break
             
             
             predicted_sentence += " " + _object + " " + _place
@@ -57,7 +69,7 @@ while 1:
                     _object = sentence[i+1]
                     print("_object :", _object)
                     break
-            if _object == None:
+            if _object == None: # Cannot Detect Person
                 print("Cannot Detect Person")
                 _object = "No"
 

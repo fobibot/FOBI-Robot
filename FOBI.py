@@ -1,6 +1,7 @@
 import os
 
 import codecs
+import json
 
 import aiy.audio
 import aiy.cloudspeech
@@ -28,8 +29,21 @@ class Robot:
 
         # self.title_names = self.LoadTitleNames()
         # self.room_names = self.LoadRoomNames()
+
+        try:
+            with open('New_ML/Special_Names/PeopleInformation.json') as json_data:
+                self.PeopleInformation = json.load(json_data)
+        except:
+            print("No file name \'PeopleInformation.json\'")
+
+        try:
+            with open('New_ML/Special_Names/NameToKeyword.json') as json_data:
+                self.NameToKeyword = json.load(json_data)
+        except:
+            print("No file name \'NameToKeyword.json\'")
+        
         self.title_names = self.LoadDatabaseFile(filename='New_ML/Special_Names/Title_Names.csv', add_expect_word=True, need_return=True)
-        self.room_names = self.LoadDatabaseFile(filename='New_ML/Special_Names/Room_Names.csv', add_expect_word=True, need_return=True)
+        # self.room_names = self.LoadDatabaseFile(filename='New_ML/Special_Names/Room_Names.csv', add_expect_word=True, need_return=True)
 
     def LoadDatabaseFile(self, filename, add_expect_word, need_return):
         with codecs.open(filename, 'r',encoding='utf-8-sig') as f:
@@ -49,20 +63,6 @@ class Robot:
         for name in lines:
             self.recognizer.expect_phrase(name)
 
-    # def LoadTitleNames(self):
-    #     print("Loading Title Names")
-    #     with codecs.open('New_ML/Special_Names/Title_Names.csv', 'r',encoding='utf-8-sig') as f:
-    #         lines = f.read().splitlines()
-    #     print(lines)
-    #     return lines
-
-    # def LoadRoomNames(self):
-    #     print("Loading Title Names")
-    #     with codecs.open('New_ML/Special_Names/Room_Names.csv', 'r',encoding='utf-8-sig') as f:
-    #         lines = f.read().splitlines()
-    #     print(lines)
-    #     return lines
-
     def Listen(self):
         print("Listening...")
         sentence = self.recognizer.recognize()
@@ -80,9 +80,6 @@ class Robot:
             cmd += ['overdrive', '25', '25']
             cmd += ['echo', '0.4', '0.8', '15', '0.8']
             cmd += ['synth', 'sine', 'fmod', '30']
-        if process:
-            cmd += ['speed', '3']
-        else:
             cmd += ['speed', '1.3']
         print(cmd)
         self.speaker = self._create_task(cmd=cmd)
