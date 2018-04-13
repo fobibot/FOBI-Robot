@@ -15,26 +15,21 @@ start_listen = False
 while 1:
     # if start_listen:
     input("Enter to start")
+    print("listening...")
     sentence = robot.Listen()
     print(sentence)
 
     predicted_sentence = predict.Predict(sentence)
 
 
-    _object = ""
-    _place = ""
+    _object = None
+    _place = None
     if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "บุคคล":
         try:
             sentence = word_tokenize(sentence, engine='deepcut')
             sentence = [x for x in sentence if x != ' '] # remove all blank spaces
             print("Word cut sentence :", sentence)
             for i, word in enumerate(sentence):
-            #     if word in robot.title_names: # found title names
-            #         print("_object :", _object)
-            #         break
-            # if _object == None: # Cannot Detect Person
-            #     print("Cannot Detect Person")
-            #     _object = "No"
                 if word in robot.title_names: # found title names
                     try:
                         _type, _object = robot.NameToKeyword[word]
@@ -45,18 +40,23 @@ while 1:
                             print("Found some error in file \'PeopleInformation.json\'")
                         break
                     except:
-                        # _type = None
-                        _object = None
-                        _place = None
+                        # _object = None
+                        # _place = None
                         print("Cannot Detect Person")
                         break
+            #     if word in robot.title_names: # found title names
+            #         print("_object :", _object)
+            #         break
+            # if _object == None: # Cannot Detect Person
+            #     print("Cannot Detect Person")
+            #     _object = "No"
             
-            
-            predicted_sentence += " " + _object + " " + _place
-            print("To RiveScript :",predicted_sentence)
-            answer = robot.Reply(predicted_sentence)
-            robot.Speak(answer, robot.thai)
-            start_listen = False
+            if _object != None:
+                predicted_sentence += " " + _object + " " + _place
+                print("To RiveScript :",predicted_sentence)
+                answer = robot.Reply(predicted_sentence)
+                robot.Speak(answer, robot.thai)
+                start_listen = False
         except TypeError:
             pass
     elif predicted_sentence == "สถานที่-สถานที่":
@@ -71,7 +71,7 @@ while 1:
                     break
             if _object == None: # Cannot Detect Person
                 print("Cannot Detect Person")
-                _object = "No"
+                _object = None
 
             _place = "สาม" # edit to find in database next time
             
