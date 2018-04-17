@@ -65,26 +65,29 @@ class Prediction:
                 print(predicted)
 
     def Predict(self, sentence):
-        # sentence = input("Sentence : ")
         last = t.time()
         words = word_tokenize(sentence, engine='deepcut') #wait for input sentence by typing
-        print("Word Segmentation time :", t.time()-last)
+        if __debug__:
+            print("Word Segmentation time :", t.time()-last)
         
         last = t.time()
         encoded_sentence = self.TransformInputData2EncodeValue(words)
-        print("Encode Data time :", t.time()-last)
+        if __debug__:
+            print("Encode Data time :", t.time()-last)
 
         # Predict output
         last = t.time()
         predictions = self.model.predict(encoded_sentence).tolist()
-        print("Predict time :", t.time()-last)
-        # print(predictions)
+        if __debug__:
+            print("Predict time :", t.time()-last)
+            print("Prediction Score", predictions)
+            print("Max Prediction Score", max(predictions[0]))
 
         last = t.time()
         predicted = self.encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
-        print("Decoded Predict time :", t.time()-last)
-        print(predicted[0])
+        if __debug__:
+            print("Decoded Predict time :", t.time()-last)
 
-        return predicted[0]
+        return predicted[0] if max(predictions[0]) >= 0.75 else None # Prediction threshold >= 0.75 or 75%
 
 

@@ -10,21 +10,38 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas
 import os
+import json
 
 # Load Datasets
 dataframe = pandas.read_csv("New_ML/Datasets_G_NewLabel.csv", header=None)
 dataset = dataframe.values
 
+def LoadJsonFile(filename):
+    try:
+        with open(filename) as json_data:
+            json_file = json.load(json_data)
+    except:
+        print("No file name", filename, ".json")
+        pass
+    return json_file
+
+remove_words = LoadJsonFile("New_ML/MustRemoveWord.json")
+print(remove_words)
+
 # Seperate Dataset into input and output datasets
 input_dataset = []
 output_dataset = []
-for data in dataset:
-    input_dataset.append(word_tokenize(data[0], engine='deepcut'))
+for data in dataset: # remove frequence words
+    sentence = word_tokenize(data[0], engine='deepcut')
+    for word in sentence:
+        if word in remove_words:
+            sentence.remove(word)
+    input_dataset.append(sentence)
     output_dataset.append(data[1])
 print(input_dataset)
+
 flat_input_list = [item for sublist in input_dataset for item in sublist] # Convert list of list to list
 flat_set_of_input_list = list(set(flat_input_list))
-# flat_set_of_input_list = flat_set_of_input_list.remove(' ') # remove blank space **************** delete this line if you have a problem
 flat_set_of_output = list(set(output_dataset))
 print("Flat set of Input Datasets",flat_set_of_input_list)
 print("Output dataset", flat_set_of_output)
