@@ -7,10 +7,12 @@ import numpy as np
 import time as t
 
 class Prediction:
-    def __init__(self):
+    def __init__(self, confidence_value):
         self.encoder_input = LabelEncoder()
         self.encoder_output = LabelEncoder()
         self.model = None
+
+        self.confidence_value = confidence_value
 
         print("Loading Model..")
         self.LoadModel()
@@ -87,7 +89,8 @@ class Prediction:
         predicted = self.encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
         if __debug__:
             print("Decoded Predict time :", t.time()-last)
+            print("Predicted as : ", predicted) if max(predictions[0]) >= self.confidence_value else print("Predicted as : Low Confidence")
 
-        return predicted[0] if max(predictions[0]) >= 0.75 else None # Prediction threshold >= 0.75 or 75%
+        return predicted[0] if max(predictions[0]) >= self.confidence_value else None # Prediction threshold >= 0.75 or 75%
 
 

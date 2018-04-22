@@ -5,17 +5,25 @@ from pythainlp.tokenize import word_tokenize
 
 # start running function for the first time
 robot = FOBI.Robot()
-predict = Prediction()
-if not __debug__:
-    sentence = robot.Listen()
+predict = Prediction(confidence_value = 0.77)
 sentence = "เริ่มทำงาน"
 predict.Predict(sentence)
+robot.Speech.CalibrateMicNoiseThreshold()
 
 start_listen = False
+
+def SecondTry(sentence):
+    global start_listen
+
+    wordcut_sentence = word_tokenize(sentence, engine='deepcut')
+    second_try_sentence = " ".join(wordcut_sentence)
+    robot.SpeakAndReply(second_try_sentence)
+    start_listen = False
 
 def FindPlaceNameInSentence(predicted_sentence, sentence):
     _object = None
     _place = None
+    _keyword = None
     try:
         sentence = word_tokenize(sentence, engine='deepcut')
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
@@ -37,18 +45,18 @@ def FindPlaceNameInSentence(predicted_sentence, sentence):
     if _object != None: # Cannot Detect Place
         predicted_sentence += " " + _object + " " + _place
     else:
-        predicted_sentence = "ไม่รู้จักสถานที่ " + _keyword
+        try:
+            predicted_sentence = "ไม่รู้จักสถานที่ " + _keyword
+        except TypeError:
+            predicted_sentence = sentence # waiting for second try
+            pass
 
-    print("To RiveScript :",predicted_sentence)
-    answer = robot.Reply(predicted_sentence)
-    robot.Speak(answer, robot.thai)
-    start_listen = False
-
-    return predicted_sentence, _object, _place
+    return predicted_sentence
 
 def FindPersonNameInSentence(predicted_sentence, sentence):
     _object = None
     _place = None
+    _keyword = None
     try:
         sentence = word_tokenize(sentence, engine='deepcut')
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
@@ -73,7 +81,8 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
                 if word in list(robot.NameToKeyword.keys()): # try to find fibo names in collected data
                     print("-------------- Case 3 --------------")
                     try:
-                        _type, _object = robot.NameToKeyword[word]
+                        _keyword = word
+                        _type, _object = robot.NameToKeyword[_keyword]
                         _place = robot.PeopleInformation[_type][_object]["room"][0] # choose first room in the list -> shown that person always there
                         predicted_sentence += " " + _object + " " + _place
                     except (NameError, KeyError):
@@ -82,41 +91,57 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
                     break # i'm not sure, will this work?
             if _object == None:
                 print("-------------- Case 4 --------------")
-                predicted_sentence = "ไม่รู้จักคน นี้"
+                try:
+                    predicted_sentence = "ไม่รู้จักคน " + _keyword
+                except TypeError:
+                    # predicted_sentence = "ไม่เข้าใจที่พูด"
+                    predicted_sentence = sentence
+                    pass
 
     except TypeError:
         pass
 
-    return predicted_sentence, _object, _place
+    return predicted_sentence
 
 while 1:
-    # if start_listen:
+    sentence = None
+    wordcut_sentence = None
     if __debug__:
         sentence = input("Type some sentence : ") 
     else:
-        print("listening...")
-        sentence = robot.Listen()
-        print(sentence)
+        while 1:
+            if not start_listen:
+                robot.Speech.waiting_for_hotword()
+                start_listen = True
+            else:
+                print("listening...")
+                sentence = robot.Speech.listen_to_gcloud()
+                if sentence != None:
+                    break
+                else:
+                    robot.SpeakAndReply("ไม่เข้าใจที่พูด")
 
     predicted_sentence = predict.Predict(sentence)
 
-    _object = None
-    _place = None
-    if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "บุคคล":
-        temp_predicted_sentence = predicted_sentence
-        predicted_sentence, _object, _place = FindPersonNameInSentence(temp_predicted_sentence, sentence)
-        
-        print("To RiveScript :", predicted_sentence)
-        answer = robot.Reply(predicted_sentence)
-        robot.Speak(answer, robot.thai)
-        start_listen = False
+    try:
+        _object = None
+        _place = None
+        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "บุคคล":
+            predicted_sentence = FindPersonNameInSentence(predicted_sentence, sentence)
+            
+            print("To RiveScript :", predicted_sentence)
+            robot.SpeakAndReply(predicted_sentence)
+            start_listen = False
 
-    elif predicted_sentence == "สถานที่-สถานที่":
-        predicted_sentence, _object, _place = FindPlaceNameInSentence(predicted_sentence, sentence)
+        elif predicted_sentence == "สถานที่-สถานที่":
+            predicted_sentence = FindPlaceNameInSentence(predicted_sentence, sentence)
+            
+            print("To RiveScript :", predicted_sentence)
+            robot.SpeakAndReply(predicted_sentence)
+            start_listen = False
 
-    else:
-        predicted_sentence = "ไม่เข้าใจที่พูด"
-        print("To RiveScript :", predicted_sentence)
-        answer = robot.Reply(predicted_sentence)
-        robot.Speak(answer, robot.thai)
-        start_listen = False
+        else:
+            SecondTry(sentence)
+
+    except TypeError:
+        SecondTry(sentence)
