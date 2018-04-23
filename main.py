@@ -110,16 +110,17 @@ while 1:
     #     sentence = input("Type some sentence : ") 
     # else:
     while 1:
-        if not start_listen:
-            robot.Speech.waiting_for_hotword()
-            start_listen = True
+        # if not start_listen:
+        #     robot.Speech.waiting_for_hotword()
+        #     start_listen = True
+        # else:
+        robot.SpeakAndReply("ทักทาย")
+        print("listening...")
+        sentence = robot.Speech.listen_to_gcloud()
+        if sentence != None:
+            break
         else:
-            print("listening...")
-            sentence = robot.Speech.listen_to_gcloud()
-            if sentence != None:
-                break
-            else:
-                robot.SpeakAndReply("ไม่เข้าใจที่พูด")
+            robot.SpeakAndReply("ไม่เข้าใจที่พูด")
 
     predicted_sentence = predict.Predict(sentence)
 

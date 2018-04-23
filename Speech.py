@@ -8,9 +8,10 @@ import speech_recognition as sr
 class Speech():
     def __init__(self, expect_phrase):
         self.GOOGLE_CLOUD_SPEECH_CREDENTIALS = self._read_credential_file(r"/home/pi/cloud_speech.json")
+        # self.GOOGLE_CLOUD_SPEECH_CREDENTIALS = self._read_credential_file(r"/Users/arsapol/cloud_speech.json")
         self.expect_phrase = expect_phrase
 
-        # Snowboy Configs
+        # # Snowboy Configs
         snowboy_dir = "/home/pi/snowboy/swig/Python3"
         snowboy_model = ["/home/pi/snowboy/resources/models/FOBI.pmdl"]
         self.snowboy_config = snowboy_dir, snowboy_model
@@ -41,8 +42,8 @@ class Speech():
             audio = self.r.listen(source, timeout=timeout)
         
         try:
-            sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH', preferred_phrases=self.expect_phrase)
-            # sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH')
+            # sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH', preferred_phrases=self.expect_phrase)
+            sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH')
             print("Google Cloud Speech thinks you said " + sentence)
             return sentence
         except sr.UnknownValueError:
