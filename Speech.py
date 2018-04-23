@@ -16,7 +16,7 @@ class Speech():
         snowboy_model = ["/home/pi/snowboy/resources/models/FOBI.pmdl"]
         self.snowboy_config = snowboy_dir, snowboy_model
 
-        self.m = sr.Microphone(device_index=0)
+        self.m = sr.Microphone()
         self.r = sr.Recognizer()
 
     def _read_credential_file(self, credential_dir):
