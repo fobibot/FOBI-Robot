@@ -7,12 +7,12 @@ import speech_recognition as sr
 
 class Speech():
     def __init__(self, expect_phrase):
-        self.GOOGLE_CLOUD_SPEECH_CREDENTIALS = self._read_credential_file(r"~/cloud_speech.json")
+        self.GOOGLE_CLOUD_SPEECH_CREDENTIALS = self._read_credential_file(r"/home/pi/cloud_speech.json")
         self.expect_phrase = expect_phrase
 
         # Snowboy Configs
-        snowboy_dir = "~/snowboy/swig/Python3"
-        snowboy_model = ["~snowboy/resources/models/snowboy.umdl"]
+        snowboy_dir = "/home/pi/snowboy/swig/Python3"
+        snowboy_model = ["/home/pi/snowboy/resources/models/FOBI.pmdl"]
         self.snowboy_config = snowboy_dir, snowboy_model
 
         self.m = sr.Microphone()
