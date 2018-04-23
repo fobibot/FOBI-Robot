@@ -17,6 +17,9 @@ class Speech():
         self.recognizer = aiy.cloudspeech.get_recognizer()
         aiy.audio.get_recorder().start()
 
+        for phrase in self.expect_phrase:
+            self.recognizer.expect_phrase(phrase)
+
         # # Snowboy Configs
         # snowboy_dir = "/home/pi/snowboy/swig/Python3"
         # snowboy_model = ["/home/pi/snowboy/resources/models/FOBI.pmdl"]
@@ -54,9 +57,9 @@ class Speech():
     #     except sr.RequestError as e:
     #         print("Could not request results from Google Cloud Speech service; {0}".format(e))
 
-    def listen_to_gcloud(self):
+    def listen_to_gcloud(self, immediate=False):
         print("Listening...")
-        sentence = self.recognizer.recognize()
+        sentence = self.recognizer.recognize(immediate=immediate)
         print("Google Cloud Speech thinks you said : " + sentence)
         return sentence
 

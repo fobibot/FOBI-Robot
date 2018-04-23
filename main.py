@@ -1,7 +1,7 @@
-import FOBI
-import time as t
+# import time as t
 from New_ML.Predict import Prediction
 from pythainlp.tokenize import word_tokenize
+import FOBI
 
 # start running function for the first time
 robot = FOBI.Robot()
@@ -105,7 +105,6 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
 
 while 1:
     sentence = None
-    wordcut_sentence = None
     # if __debug__:
     #     sentence = input("Type some sentence : ") 
     # else:
@@ -116,7 +115,7 @@ while 1:
         else:
             robot.SpeakAndReply("ทักทาย")
             print("listening...")
-            sentence = robot.Speech.listen_to_gcloud()
+            sentence = robot.Speech.listen_to_gcloud(immediate=True)
             if sentence != None:
                 break
             else:
