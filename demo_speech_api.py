@@ -14,7 +14,7 @@ def LoadJsonFile(filename):
 NameToKeyword = LoadJsonFile('New_ML/Special_Names/NameToKeyword.json')
 Speech = Speech.Speech(list(NameToKeyword.keys()))
 
-Speech.CalibrateMicNoiseThreshold()
+# Speech.CalibrateMicNoiseThreshold()
 
 while True:
     print("Listening...")
