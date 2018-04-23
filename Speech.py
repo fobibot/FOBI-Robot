@@ -16,7 +16,7 @@ class Speech():
         snowboy_model = ["/home/pi/snowboy/resources/models/FOBI.pmdl"]
         self.snowboy_config = snowboy_dir, snowboy_model
 
-        self.m = sr.Microphone(sample_rate=16000)
+        self.m = sr.Microphone(device_index=0)
         self.r = sr.Recognizer()
 
     def _read_credential_file(self, credential_dir):
@@ -42,8 +42,8 @@ class Speech():
             audio = self.r.listen(source, timeout=timeout)
         
         try:
-            # sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH', preferred_phrases=self.expect_phrase)
-            sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH')
+            sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH', preferred_phrases=self.expect_phrase)
+            # sentence = self.r.recognize_google_cloud(audio, credentials_json=self.GOOGLE_CLOUD_SPEECH_CREDENTIALS, language='th-TH')
             print("Google Cloud Speech thinks you said " + sentence)
             return sentence
         except sr.UnknownValueError:
