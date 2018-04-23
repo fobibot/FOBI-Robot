@@ -140,8 +140,8 @@ def fit_model(X, y, model):
     # TODO: Create a dictionary for the parameter 'max_depth' with a range from 1 to 10
     # params = {'epochs ':np.arange(50,300,50), 'batch_size':np.arange(10,50,5)}
     # params = dict(epochs=np.arange(20,180,25), loss=['categorical_crossentropy', 'mean_squared_error'], optimizer=['adam', 'Nadam', 'Adamax', 'Adadelta', 'RMSprop'])
-    params = {'optimizers':['RMSprop', 'Adamax', 'Adadelta'], 
-              'epochs':np.arange(20,46,5),
+    params = {'optimizers':['adam', 'Nadam', 'Adamax', 'Adadelta', 'RMSprop'], 
+              'epochs':np.arange(20,180,25),
               'losses':['categorical_crossentropy', 'mean_squared_error']}
 
     # TODO: Create the grid search cv object --> GridSearchCV()

@@ -1,3 +1,4 @@
+import snowboy.snowboydecoder as snowboydecoder
 import FOBI
 import time as t
 from New_ML.Predict import Prediction
@@ -103,17 +104,13 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
 
     return predicted_sentence
 
-while 1:
+def run_session():
+    global start_listen
     sentence = None
-    wordcut_sentence = None
-    # if __debug__:
-    #     sentence = input("Type some sentence : ") 
-    # else:
-    while 1:
-        if not start_listen:
-            robot.Speech.waiting_for_hotword()
-            start_listen = True
-        else:
+    if __debug__:
+        sentence = input("Type some sentence : ") 
+    else:
+        while 1:
             print("listening...")
             sentence = robot.Speech.listen_to_gcloud()
             if sentence != None:
@@ -121,27 +118,54 @@ while 1:
             else:
                 robot.SpeakAndReply("ไม่เข้าใจที่พูด")
 
-    predicted_sentence = predict.Predict(sentence)
+        predicted_sentence = predict.Predict(sentence)
 
-    try:
-        _object = None
-        _place = None
-        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "บุคคล":
-            predicted_sentence = FindPersonNameInSentence(predicted_sentence, sentence)
-            
-            print("To RiveScript :", predicted_sentence)
-            robot.SpeakAndReply(predicted_sentence)
-            start_listen = False
+        try:
+            _object = None
+            _place = None
+            if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "บุคคล":
+                predicted_sentence = FindPersonNameInSentence(predicted_sentence, sentence)
+                
+                print("To RiveScript :", predicted_sentence)
+                robot.SpeakAndReply(predicted_sentence)
+                start_listen = False
 
-        elif predicted_sentence == "สถานที่-สถานที่":
-            predicted_sentence = FindPlaceNameInSentence(predicted_sentence, sentence)
-            
-            print("To RiveScript :", predicted_sentence)
-            robot.SpeakAndReply(predicted_sentence)
-            start_listen = False
+            elif predicted_sentence == "สถานที่-สถานที่":
+                predicted_sentence = FindPlaceNameInSentence(predicted_sentence, sentence)
+                
+                print("To RiveScript :", predicted_sentence)
+                robot.SpeakAndReply(predicted_sentence)
+                start_listen = False
 
-        else:
+            else:
+                SecondTry(sentence)
+
+        except TypeError:
             SecondTry(sentence)
 
-    except TypeError:
-        SecondTry(sentence)
+model = "snowboy2/resources/models/FOBI.pmdl"
+detector = None
+
+def interrupt_callback():
+    global start_listen
+    return start_listen
+
+def action():
+    # disable Hotword Detection
+    global detector, start_listen
+
+    detector.terminate()
+    print("Hotword Detected!!!!")
+
+    run_session()   
+
+    detector = snowboydecoder.HotwordDetector(model, sensitivity=0.45)
+    print('Listening for Hotword')
+    detector.start(callbacks, interrupt_check=interrupt_callback)
+
+callbacks = [action]
+
+while 1:
+    detector = snowboydecoder.HotwordDetector(model, sensitivity=0.45)
+    print('Listening for Hotword')
+    detector.start(callbacks, interrupt_check=interrupt_callback)
