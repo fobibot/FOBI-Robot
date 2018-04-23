@@ -11,6 +11,9 @@ sentence = "เริ่มทำงาน"
 predict.Predict(sentence)
 robot.Speech.CalibrateMicNoiseThreshold()
 
+model = "snowboy/resources/models/snowboy.umdl"
+detector = None
+
 start_listen = False
 
 def SecondTry(sentence):
