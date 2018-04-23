@@ -145,7 +145,6 @@ def run_session():
 
 model = "snowboy2/resources/models/FOBI.pmdl"
 detector = None
-callbacks = [action]
 
 def action():
     # disable Hotword Detection
@@ -159,6 +158,8 @@ def action():
     detector = snowboydecoder.HotwordDetector(model, sensitivity=0.45)
     print('Listening for Hotword')
     detector.start(callbacks, interrupt_check=start_listen)
+
+callbacks = [action]
 
 while 1:
     detector = snowboydecoder.HotwordDetector(model, sensitivity=0.45)
