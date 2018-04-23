@@ -73,7 +73,7 @@ class action:
         t.daemon = True
         t.start()
         return self
-    def face_detected():
+    def face_detected(self):
         return self._face_detected
     def eye_start(self):
         self.eye_time = time.time()

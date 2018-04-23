@@ -4,6 +4,7 @@ import codecs
 import json
 
 import Speech
+from action import action
 
 from rivescript import RiveScript
 
@@ -27,6 +28,9 @@ class Robot:
         
         # Setup Speech - Google Cloud Speech and Text to Speech
         self.Speech = Speech.Speech(list(self.NameToKeyword.keys()))
+        
+        self.Motion = action.action()
+        # self.Motion.motion("sad") -> sad, happy, angry, normal, curious
 
         # Load RiveScript
         self._chatter = RiveScript(utf8=True)
