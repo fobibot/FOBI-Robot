@@ -8,7 +8,7 @@ robot = FOBI.Robot()
 predict = Prediction(confidence_value = 0.77)
 sentence = "เริ่มทำงาน"
 predict.Predict(sentence)
-robot.Speech.CalibrateMicNoiseThreshold()
+# robot.Speech.CalibrateMicNoiseThreshold()
 
 start_listen = False
 
