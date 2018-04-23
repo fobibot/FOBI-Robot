@@ -159,9 +159,13 @@ def action():
     print('Listening for Hotword')
     detector.start(callbacks, interrupt_check=start_listen)
 
+def interrupt_callback():
+    global start_listen
+    return start_listen
+
 callbacks = [action]
 
 while 1:
     detector = snowboydecoder.HotwordDetector(model, sensitivity=0.45)
     print('Listening for Hotword')
-    detector.start(callbacks, interrupt_check=start_listen)
+    detector.start(callbacks, interrupt_check=interrupt_callback)
