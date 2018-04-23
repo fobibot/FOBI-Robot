@@ -31,14 +31,14 @@ class Speech():
 
     def waiting_for_hotword(self):
         print("Waiting for hotword")
-        with sr.Microphone() as source:
+        with self.m as source:
             self.r.listen(source, snowboy_configuration=self.snowboy_config)
         print("**************** Got Hotword! ****************")
         
         return True
 
     def listen_to_gcloud(self, timeout=8):
-        with sr.Microphone() as source:
+        with self.m as source:
             audio = self.r.listen(source, timeout=timeout)
         
         try:
