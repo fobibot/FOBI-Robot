@@ -61,7 +61,7 @@ class Speech():
         print("Listening...")
         sentence = self.recognizer.recognize(immediate=immediate)
         print("Google Cloud Speech thinks you said : " + sentence)
-        return sentence
+        return sentence if sentence != None else " "
 
     # Speak Zone
     def Speak(self, sentence, lang, wait=False, process=False, speak_volume=10, robot_name=False):
