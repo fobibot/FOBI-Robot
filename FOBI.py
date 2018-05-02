@@ -1,10 +1,11 @@
-# import os
+import os
 
 import codecs
 import json
 
 import Speech
-from action import action
+if os.name == 'arm':
+    from action import action
 
 from rivescript import RiveScript
 
@@ -29,7 +30,8 @@ class Robot:
         # Setup Speech - Google Cloud Speech and Text to Speech
         self.Speech = Speech.Speech(list(self.NameToKeyword.keys()))
         
-        self.Motion = action.action()
+        if os.name == 'arm':
+            self.Motion = action.action()
         # self.Motion.motion("sad") -> sad, happy, angry, normal, curious
 
         # Load RiveScript
@@ -54,6 +56,16 @@ class Robot:
 
     def SpeakAndReply(self, text):
         answer = self._chatter.reply("localuser", text)
+        
+        try:
+            answer = answer.split(',')
+            emotion = answer[1]
+            answer = answer[0]
+            self.Motion.motion(emotion)
+        finally:
+            print("Something wrong with emotion in \'text.rive\' or \'action.py\'")
+            print("Error in SpeakAndReply function : answer = ", answer)
+            
         if answer == "FO BEE":
             self.Speech.Speak(answer, self.english, wait=True, robot_name=True)
         else:

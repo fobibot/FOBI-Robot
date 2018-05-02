@@ -1,4 +1,5 @@
 # import time as t
+import os
 from New_ML.Predict import Prediction
 from pythainlp.tokenize import word_tokenize
 import FOBI
@@ -105,22 +106,41 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
 
 while 1:
     sentence = None
+    count_cannot_recognize_time = 0
     # if __debug__:
     #     sentence = input("Type some sentence : ") 
     # else:
     while 1:
         if not start_listen:
-            if robot.Motion.face_detected():
+            if os.name == 'arm':
+                if robot.Motion.face_detected():
+                    start_listen = True
+            else:
+                input("Enter to listen...")
                 start_listen = True
         else:
-            robot.SpeakAndReply("ทักทาย")
+            if count_cannot_recognize_time == 0:
+                robot.SpeakAndReply("ทักทาย")
             print("listening...")
-            sentence = robot.Speech.listen_to_gcloud(immediate=True)
-            if sentence != None:
-                break
+            sentence = robot.Speech.listen_to_gcloud()
+            if sentence != '' and sentence != ' ':
+                print("------ Case 1 -------")
+                start_listen = False
+                # break
             else:
+                print("------ Case 2 -------")
+                if count_cannot_recognize_time >= 3:
+                    robot.SpeakAndReply("ไม่ได้พูด") # user didn't say anything
+                    start_listen = False
+                    # break
                 robot.SpeakAndReply("ไม่เข้าใจที่พูด")
+                count_cannot_recognize_time += 1
 
+            # elif sentence == ' ': # users didn't say anything
+            #     robot.SpeakAndReply("ไม่ได้พูดอะไร")
+
+
+    # if sentence != '' and sentence != ' ': # In case of empty speech
     predicted_sentence = predict.Predict(sentence)
 
     try:
