@@ -1,7 +1,8 @@
 # import time as t
 import os
 from New_ML.Predict import Prediction
-from pythainlp.tokenize import word_tokenize
+# from pythainlp.tokenize import word_tokenize
+from deepcut import tokenize as word_tokenize
 import FOBI
 
 # start running function for the first time
@@ -16,7 +17,7 @@ start_listen = False
 def SecondTry(sentence):
     global start_listen
 
-    wordcut_sentence = word_tokenize(sentence, engine='deepcut')
+    wordcut_sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
     second_try_sentence = " ".join(wordcut_sentence)
     robot.SpeakAndReply(second_try_sentence)
     start_listen = False
@@ -26,7 +27,7 @@ def FindPlaceNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, engine='deepcut')
+        sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
@@ -59,7 +60,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, engine='deepcut')
+        sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
@@ -125,8 +126,8 @@ while 1:
             sentence = robot.Speech.listen_to_gcloud()
             if sentence != '' and sentence != ' ':
                 print("------ Case 1 -------")
-                start_listen = False
-                # break
+                start_listen = True
+                break
             else:
                 print("------ Case 2 -------")
                 if count_cannot_recognize_time >= 3:
@@ -136,11 +137,7 @@ while 1:
                 robot.SpeakAndReply("ไม่เข้าใจที่พูด")
                 count_cannot_recognize_time += 1
 
-            # elif sentence == ' ': # users didn't say anything
-            #     robot.SpeakAndReply("ไม่ได้พูดอะไร")
-
-
-    # if sentence != '' and sentence != ' ': # In case of empty speech
+    
     predicted_sentence = predict.Predict(sentence)
 
     try:

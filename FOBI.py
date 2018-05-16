@@ -61,8 +61,10 @@ class Robot:
             answer = answer.split(',')
             emotion = answer[1]
             answer = answer[0]
-            self.Motion.motion(emotion)
-        finally:
+            if os.name == 'arm':
+                self.Motion.motion(emotion)
+            print("Robot Feeling is", emotion)
+        except IndexError:
             print("Something wrong with emotion in \'text.rive\' or \'action.py\'")
             print("Error in SpeakAndReply function : answer = ", answer)
             
