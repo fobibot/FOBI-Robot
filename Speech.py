@@ -15,7 +15,7 @@ class Speech():
     def __init__(self, expect_phrase):
         self.expect_phrase = expect_phrase
 
-        if os.name == 'arm':
+        if os_type == 'Linux': #RPi
             set_language_code("th-TH")
             self.recognizer = aiy.cloudspeech.get_recognizer()
             aiy.audio.get_recorder().start()
@@ -23,7 +23,7 @@ class Speech():
             for phrase in self.expect_phrase:
                 self.recognizer.expect_phrase(phrase)
 
-        elif os.name == 'posix':
+        else:
             # self.GOOGLE_CLOUD_SPEECH_CREDENTIALS = self._read_credential_file(r"/home/pi/cloud_speech.json")
             self.GOOGLE_CLOUD_SPEECH_CREDENTIALS = self._read_credential_file(r"/Users/arsapol/cloud_speech.json")
 
@@ -44,14 +44,14 @@ class Speech():
         
     #     return True
 
-    if os.name == 'arm':
+    if os_type == 'Linux': #RPi
         def listen_to_gcloud(self, immediate=False):
             print("Listening...")
             sentence = self.recognizer.recognize(immediate=immediate)
             print("Google Cloud Speech thinks you said : " + sentence)
             return sentence if sentence != '' else " "
 
-    elif os.name == 'posix': # osx
+    else: # osx
         def listen_to_gcloud(self, timeout=8):
             with self.m as source:
                 print("Say something!")
