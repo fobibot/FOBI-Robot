@@ -85,7 +85,7 @@ class Speech():
     # Speak Zone
     def Speak(self, sentence, lang, wait=False, process=False, speak_volume=10, robot_name=False):
         print("Speak:", sentence)
-        cmd = ['google_speech', '-l', lang, sentence[0]]
+        cmd = ['google_speech', '-l', lang, sentence]
         cmd += ['--sox-effects', 'gain', str(speak_volume)]
         if process:
             cmd += ['pitch', '50']

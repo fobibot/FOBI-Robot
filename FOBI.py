@@ -74,7 +74,8 @@ class Robot:
             print("Robot Feeling is", emotion)
         except IndexError:
             print("Something wrong with emotion in \'text.rive\' or \'action.py\'")
-            print("Error in SpeakAndReply function : answer = ", answer)
+            print("Error in SpeakAndReply function : answer = ", answer[0])
+            answer = answer[0]
             
         if answer == "FO BEE":
             self.Speech.Speak(answer, self.english, wait=True, robot_name=True)
