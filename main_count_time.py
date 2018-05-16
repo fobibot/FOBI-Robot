@@ -1,8 +1,10 @@
-# import time as t
+import time as t
 import os
 os_type = list(os.uname())[0]
+start = t.time()
 from New_ML.Predict import Prediction
-# from pythainlp.tokenize import word_tokenize
+stop = t.time()
+print("Loaded Predict.py Time :", stop-start)
 from deepcut import tokenize as word_tokenize
 import FOBI
 

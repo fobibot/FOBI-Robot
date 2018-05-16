@@ -17,16 +17,23 @@ class Prediction:
 
         print("Loading Model..")
         self.LoadModel()
-        print("Finished Loading Model")
+        print("Finished Loading Model : ")
 
     def LoadModel(self):
         # dataframe = pandas.read_csv("New_ML/Datasets_NewLabel.csv", header=None)
         # dataset = dataframe.values
 
+        start = t.time()
         self.encoder_input.classes_ = np.load('New_ML/Saved_Model/Encoded_Input_classes.npy')
-        self.encoder_output.classes_ = np.load('New_ML/Saved_Model/Encoded_Output_classes.npy')
+        print("Loaded Encodeded Input Model :", t.time()-start)
 
+        start = t.time()
+        self.encoder_output.classes_ = np.load('New_ML/Saved_Model/Encoded_Output_classes.npy')
+        print("Loaded Encodeded Output Model :", t.time()-start)
+
+        start = t.time()
         self.model = load_model('New_ML/Saved_Model/model.h5')
+        print("Loaded LSTM Model :", t.time()-start)
 
     def TransformInputData2EncodeValue(self, _input, _max_word_lenght=30):
         sentence = []
