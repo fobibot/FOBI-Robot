@@ -7,6 +7,14 @@ from keras import backend as K
 import pandas
 import numpy as np
 import time as t
+from keras.models import model_from_json
+
+import os
+
+if list(os.uname())[0] == 'Linux':
+    custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
+else:
+    custom_dict_dir = "custom_dict.txt"
 
 class Prediction:
     def __init__(self, confidence_value):
@@ -37,6 +45,14 @@ class Prediction:
         self.model = load_model('New_ML/Saved_Model/model.h5')
         print("Loaded LSTM Model :", t.time()-start)
 
+        # start = t.time()
+        # with open('New_ML/Saved_Model/model.json', 'r') as json:
+        #     loaded_model_json = json.read()
+        # loaded_model = model_from_json(loaded_model_json)
+        # # load weights into new model
+        # self.model = loaded_model.load_weights("New_ML/Saved_Model/model.h5")
+        # print("Loaded LSTM Model :", t.time()-start)
+
     def TransformInputData2EncodeValue(self, _input, _max_word_lenght=30):
         sentence = []
         for word in _input:
@@ -58,7 +74,7 @@ class Prediction:
             if sentence == "1":
                 sentence = listen_func()
                 last = t.time()
-                words = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt") #wait for input sentence by typing
+                words = word_tokenize(sentence, custom_dict=custom_dict_dir) #wait for input sentence by typing
                 print("Word Segmentation time :", t.time()-last)
                 
                 last = t.time()
@@ -78,7 +94,7 @@ class Prediction:
 
     def Predict(self, sentence):
         last = t.time()
-        words = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt") #wait for input sentence by typing
+        words = word_tokenize(sentence, custom_dict=custom_dict_dir) #wait for input sentence by typing
         if __debug__:
             print("Word Segmentation time :", t.time()-last)
         

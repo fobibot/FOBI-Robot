@@ -3,6 +3,8 @@ import os
 import codecs
 import json
 
+from deepcut import tokenize
+
 import Speech
 os_type = list(os.uname())[0]
 if os_type == 'Linux': #RPi
@@ -18,7 +20,7 @@ class Robot:
         self.robot_name = "FO BEE"
 
         # Load Datas.json files
-        
+
         self.PeopleInformation = self.LoadJsonFile('New_ML/Special_Names/PeopleInformation.json')
         self.NameToKeyword = self.LoadJsonFile('New_ML/Special_Names/NameToKeyword.json')
         self.RoomInformation = self.LoadJsonFile('New_ML/Special_Names/RoomInformation.json')
@@ -32,12 +34,18 @@ class Robot:
         
         if os_type == 'Linux': #RPi
             self.Motion = action.action()
+            self.custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
+        else:
+            self.custom_dict_dir = "custom_dict.txt"
         # self.Motion.motion("sad") -> sad, happy, angry, normal, curious
 
         # Load RiveScript
         self._chatter = RiveScript(utf8=True)
         self._chatter.load_directory("RiveScript")
         self._chatter.sort_replies()
+
+    def word_tokenize(self, text):
+        return tokenize(text, custom_dict=self.custom_dict_dir)
         
     def LoadJsonFile(self, filename):
         try:

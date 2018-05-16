@@ -2,7 +2,6 @@ import time as t
 import os
 os_type = list(os.uname())[0]
 from New_ML.Predict import Prediction
-from deepcut import tokenize as word_tokenize
 start = t.time()
 import FOBI
 print("Loaded FOBI.py time :", t.time()-start)
@@ -29,7 +28,7 @@ start_listen = False
 def SecondTry(sentence):
     global start_listen
 
-    wordcut_sentence = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt")
+    wordcut_sentence = robot.word_tokenize(sentence)
     second_try_sentence = " ".join(wordcut_sentence)
     robot.SpeakAndReply(second_try_sentence)
     start_listen = False
@@ -39,7 +38,7 @@ def FindPlaceNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt")
+        sentence = robot.word_tokenize(sentence)
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
@@ -72,7 +71,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt")
+        sentence = robot.word_tokenize(sentence)
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):

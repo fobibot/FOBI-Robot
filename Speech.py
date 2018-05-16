@@ -8,8 +8,10 @@ if os_type == 'Linux': #RPi
     import aiy.cloudspeech
     from aiy.i18n import set_language_code
     import aiy.audio
+    custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
 elif os_type == 'Darwin':
     import speech_recognition as sr
+    custom_dict_dir = "custom_dict.txt"
 
 class Speech():
     def __init__(self, expect_phrase):

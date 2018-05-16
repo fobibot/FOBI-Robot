@@ -143,3 +143,11 @@ for i, pred in enumerate(pre):
 
 
 model.save('New_ML/Saved_Model/model.h5')
+
+# serialize model to JSON
+# model_json = model.to_json()
+# with open("New_ML/Saved_Model/model.json", "w") as json_file:
+#     json_file.write(model_json)
+# # serialize weights to HDF5
+# model.save_weights("New_ML/Saved_Model/model.h5")
+# print("Saved model to disk")
