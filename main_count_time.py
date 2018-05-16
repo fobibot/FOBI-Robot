@@ -29,7 +29,7 @@ start_listen = False
 def SecondTry(sentence):
     global start_listen
 
-    wordcut_sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
+    wordcut_sentence = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt")
     second_try_sentence = " ".join(wordcut_sentence)
     robot.SpeakAndReply(second_try_sentence)
     start_listen = False
@@ -39,7 +39,7 @@ def FindPlaceNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
+        sentence = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt")
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
@@ -72,7 +72,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
+        sentence = word_tokenize(sentence, custom_dict="/home/pi/new/thesis/custom_dict.txt")
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
