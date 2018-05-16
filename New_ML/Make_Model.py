@@ -94,41 +94,41 @@ model.add(Dense(number_of_category, activation='softmax')) #softmax used for hig
 
 model.summary()
 
-from keras import backend as K
+# from keras import backend as K
 
-def f1(y_true, y_pred):
-    def recall(y_true, y_pred):
-        """Recall metric.
+# def f1(y_true, y_pred):
+#     def recall(y_true, y_pred):
+#         """Recall metric.
 
-        Only computes a batch-wise average of recall.
+#         Only computes a batch-wise average of recall.
 
-        Computes the recall, a metric for multi-label classification of
-        how many relevant items are selected.
-        """
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-        recall = true_positives / (possible_positives + K.epsilon())
-        return recall
+#         Computes the recall, a metric for multi-label classification of
+#         how many relevant items are selected.
+#         """
+#         true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+#         possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+#         recall = true_positives / (possible_positives + K.epsilon())
+#         return recall
 
-    def precision(y_true, y_pred):
-        """Precision metric.
+#     def precision(y_true, y_pred):
+#         """Precision metric.
 
-        Only computes a batch-wise average of precision.
+#         Only computes a batch-wise average of precision.
 
-        Computes the precision, a metric for multi-label classification of
-        how many selected items are relevant.
-        """
-        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-        precision = true_positives / (predicted_positives + K.epsilon())
-        return precision
-    precision = precision(y_true, y_pred)
-    recall = recall(y_true, y_pred)
-    return 2*((precision*recall)/(precision+recall+K.epsilon()))
+#         Computes the precision, a metric for multi-label classification of
+#         how many selected items are relevant.
+#         """
+#         true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+#         predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+#         precision = true_positives / (predicted_positives + K.epsilon())
+#         return precision
+#     precision = precision(y_true, y_pred)
+#     recall = recall(y_true, y_pred)
+#     return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
 model.compile(loss='categorical_crossentropy',
               optimizer='adam',
-              metrics=['accuracy', f1])
+              metrics=['accuracy'])
 
 model.fit(X_train, y_train, validation_split=0.2,
           batch_size=32,

@@ -14,7 +14,7 @@ print("Initial FOBI time :", t.time()-start)
 
 start = t.time()
 predict = Prediction(confidence_value = 0.77)
-print("Initial FOBI time :", t.time()-start)
+print("Initial Prediction time :", t.time()-start)
 
 
 sentence = "เริ่มทำงาน"
