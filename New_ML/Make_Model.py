@@ -33,7 +33,7 @@ print(remove_words)
 input_dataset = []
 output_dataset = []
 for data in dataset: # remove frequence words
-    sentence = word_tokenize(data[0], custom_dict="custom_dict.txt")
+    sentence = word_tokenize(data[0], custom_dict="/home/pi/new/thesis/custom_dict.txt")
     for word in sentence:
         if word in remove_words:
             sentence.remove(word)
