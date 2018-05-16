@@ -1,5 +1,6 @@
 # import time as t
 import os
+os_type = list(os.uname())[0]
 from New_ML.Predict import Prediction
 # from pythainlp.tokenize import word_tokenize
 from deepcut import tokenize as word_tokenize
@@ -113,7 +114,7 @@ while 1:
     # else:
     while 1:
         if not start_listen:
-            if os.name == 'arm':
+            if os_type == 'Linux': #RPi
                 if robot.Motion.face_detected():
                     start_listen = True
             else:

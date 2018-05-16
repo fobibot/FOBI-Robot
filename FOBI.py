@@ -4,7 +4,8 @@ import codecs
 import json
 
 import Speech
-if os.name == 'arm':
+os_type = list(os.uname())[0]
+if os_type == 'Linux': #RPi
     from action import action
 
 from rivescript import RiveScript
@@ -30,7 +31,7 @@ class Robot:
         # Setup Speech - Google Cloud Speech and Text to Speech
         self.Speech = Speech.Speech(list(self.NameToKeyword.keys()))
         
-        if os.name == 'arm':
+        if os_type == 'Linux': #RPi
             self.Motion = action.action()
         # self.Motion.motion("sad") -> sad, happy, angry, normal, curious
 
@@ -61,7 +62,7 @@ class Robot:
             answer = answer.split(',')
             emotion = answer[1]
             answer = answer[0]
-            if os.name == 'arm':
+            if os_type == 'Linux': #RPi
                 self.Motion.motion(emotion)
             print("Robot Feeling is", emotion)
         except IndexError:

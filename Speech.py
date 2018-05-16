@@ -3,11 +3,12 @@ import json
 import os
 from subprocess import PIPE, Popen
 
-if os.name == 'arm':
+os_type = list(os.uname())[0]
+if os_type == 'Linux': #RPi
     import aiy.cloudspeech
     from aiy.i18n import set_language_code
     import aiy.audio
-elif os.name == 'posix':
+elif os_type == 'Darwin':
     import speech_recognition as sr
 
 class Speech():
