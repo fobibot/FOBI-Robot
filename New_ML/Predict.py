@@ -1,4 +1,5 @@
-from pythainlp.tokenize import word_tokenize
+# from pythainlp.tokenize import word_tokenize
+from deepcut import tokenize as word_tokenize
 from sklearn.preprocessing import LabelEncoder
 from keras.models import load_model
 from keras.preprocessing import sequence
@@ -48,7 +49,7 @@ class Prediction:
             if sentence == "1":
                 sentence = listen_func()
                 last = t.time()
-                words = word_tokenize(sentence, engine='deepcut') #wait for input sentence by typing
+                words = word_tokenize(sentence, custom_dict="custom_dict.txt") #wait for input sentence by typing
                 print("Word Segmentation time :", t.time()-last)
                 
                 last = t.time()
@@ -68,7 +69,7 @@ class Prediction:
 
     def Predict(self, sentence):
         last = t.time()
-        words = word_tokenize(sentence, engine='deepcut') #wait for input sentence by typing
+        words = word_tokenize(sentence, custom_dict="custom_dict.txt") #wait for input sentence by typing
         if __debug__:
             print("Word Segmentation time :", t.time()-last)
         

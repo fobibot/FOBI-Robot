@@ -1,4 +1,5 @@
-from pythainlp.tokenize import word_tokenize
+# from pythainlp.tokenize import word_tokenize
+from deepcut import tokenize as word_tokenize
 from sklearn.preprocessing import LabelEncoder
 from keras.preprocessing import sequence
 from keras.utils import np_utils
@@ -32,7 +33,7 @@ print(remove_words)
 input_dataset = []
 output_dataset = []
 for data in dataset: # remove frequence words
-    sentence = word_tokenize(data[0], engine='deepcut')
+    sentence = word_tokenize(data[0], custom_dict="custom_dict.txt")
     for word in sentence:
         if word in remove_words:
             sentence.remove(word)
@@ -70,31 +71,75 @@ encoded_train_y_datasets = np_utils.to_categorical( encoder_output.transform(out
 print("Encoded Train_Y dataset :\n", encoded_train_y_datasets)
 
 # Train Test Split
-seed = 7
+seed = 46
 np.random.seed(seed)
 X_train, X_test, y_train, y_test = train_test_split(encoded_train_x_datasets, encoded_train_y_datasets, test_size=0.2, random_state=seed)
 
 # ML Model Structure
-max_features = 2000
+# max_features = len(encoded_train_x_datasets)
+# model = Sequential()
+# model.add(Embedding(max_features, max_word_lenght))
+# model.add(LSTM(max_word_lenght))
+# model.add(Dropout(0.5))
+# model.add(Dense(number_of_category, activation='softmax')) #softmax used for highlight the largest values and suppress values which are significantly below the maximum value
+
+max_features = len(encoded_train_x_datasets)
 model = Sequential()
 model.add(Embedding(max_features, max_word_lenght))
-model.add(LSTM(max_word_lenght, dropout=0.1, recurrent_dropout=0.1))
-model.add(Dense(max_word_lenght, activation='sigmoid'))
+model.add(LSTM(max_word_lenght, dropout=0.2, recurrent_dropout=0.1, return_sequences=True))
+model.add(LSTM(max_word_lenght, dropout=0.2, recurrent_dropout=0.1))
+# model.add(Dense(max_word_lenght, activation='sigmoid'))
+model.add(Dropout(0.3))
 model.add(Dense(number_of_category, activation='softmax')) #softmax used for highlight the largest values and suppress values which are significantly below the maximum value
+
+model.summary()
+
+from keras import backend as K
+
+def f1(y_true, y_pred):
+    def recall(y_true, y_pred):
+        """Recall metric.
+
+        Only computes a batch-wise average of recall.
+
+        Computes the recall, a metric for multi-label classification of
+        how many relevant items are selected.
+        """
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+        recall = true_positives / (possible_positives + K.epsilon())
+        return recall
+
+    def precision(y_true, y_pred):
+        """Precision metric.
+
+        Only computes a batch-wise average of precision.
+
+        Computes the precision, a metric for multi-label classification of
+        how many selected items are relevant.
+        """
+        true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+        predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+        precision = true_positives / (predicted_positives + K.epsilon())
+        return precision
+    precision = precision(y_true, y_pred)
+    recall = recall(y_true, y_pred)
+    return 2*((precision*recall)/(precision+recall+K.epsilon()))
 
 model.compile(loss='categorical_crossentropy',
               optimizer='adam',
-              metrics=['accuracy'])
+              metrics=['accuracy', f1])
 
-model.fit(X_train, y_train, validation_data=(X_test,y_test),
+model.fit(X_train, y_train, validation_split=0.2,
           batch_size=32,
-          epochs=100)
+          epochs=70)
 
 predictions = model.predict(X_test)
 pre = []
 for x in predictions:
     pre.append(x.tolist().index(max(x)))
-# round predictions
-rounded = [round(x[0]) for x in predictions]
-print(predictions,pre)
+for i, pred in enumerate(pre):
+    print(i, ":", pred)
+
+
 model.save('New_ML/Saved_Model/model.h5')
