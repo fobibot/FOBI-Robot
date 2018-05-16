@@ -40,18 +40,18 @@ class Prediction:
         self.encoder_output.classes_ = np.load('New_ML/Saved_Model/Encoded_Output_classes.npy')
         print("Loaded Encodeded Output Model :", t.time()-start)
 
-        start = t.time()
-        K.clear_session()
-        self.model = load_model('New_ML/Saved_Model/model.h5')
-        print("Loaded LSTM Model :", t.time()-start)
-
         # start = t.time()
-        # with open('New_ML/Saved_Model/model.json', 'r') as json:
-        #     loaded_model_json = json.read()
-        # loaded_model = model_from_json(loaded_model_json)
-        # # load weights into new model
-        # self.model = loaded_model.load_weights("New_ML/Saved_Model/model.h5")
+        K.clear_session()
+        # self.model = load_model('New_ML/Saved_Model/model.h5')
         # print("Loaded LSTM Model :", t.time()-start)
+
+        start = t.time()
+        with open('New_ML/Saved_Model/model_json.json', 'r') as json:
+            loaded_model_json = json.read()
+        loaded_model = model_from_json(loaded_model_json)
+        # load weights into new model
+        self.model = loaded_model.load_weights("New_ML/Saved_Model/model_json.h5")
+        print("Loaded LSTM Model :", t.time()-start)
 
     def TransformInputData2EncodeValue(self, _input, _max_word_lenght=30):
         sentence = []

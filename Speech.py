@@ -50,8 +50,8 @@ class Speech():
         def listen_to_gcloud(self, immediate=False):
             print("Listening...")
             sentence = self.recognizer.recognize(immediate=immediate)
-            print("Google Cloud Speech thinks you said : " + sentence)
-            return sentence if sentence != '' else " "
+            # print("Google Cloud Speech thinks you said : " + sentence)
+            return sentence if (sentence != '' and sentence != None) else " "
 
     else: # osx
         def listen_to_gcloud(self, timeout=8):
