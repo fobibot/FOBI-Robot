@@ -10,8 +10,6 @@ if os_type == 'Linux': #RPi
 
 from rivescript import RiveScript
 
-# from subprocess import PIPE, Popen
-
 class Robot:
     def __init__(self):
         print("Initialize Robot")
@@ -20,6 +18,7 @@ class Robot:
         self.robot_name = "FO BEE"
 
         # Load Datas.json files
+        
         self.PeopleInformation = self.LoadJsonFile('New_ML/Special_Names/PeopleInformation.json')
         self.NameToKeyword = self.LoadJsonFile('New_ML/Special_Names/NameToKeyword.json')
         self.RoomInformation = self.LoadJsonFile('New_ML/Special_Names/RoomInformation.json')

@@ -1,18 +1,27 @@
 import time as t
 import os
 os_type = list(os.uname())[0]
-start = t.time()
 from New_ML.Predict import Prediction
-stop = t.time()
-print("Loaded Predict.py Time :", stop-start)
 from deepcut import tokenize as word_tokenize
+start = t.time()
 import FOBI
+print("Loaded FOBI.py time :", t.time()-start)
 
 # start running function for the first time
+start = t.time()
 robot = FOBI.Robot()
+print("Initial FOBI time :", t.time()-start)
+
+start = t.time()
 predict = Prediction(confidence_value = 0.77)
+print("Initial FOBI time :", t.time()-start)
+
+
 sentence = "เริ่มทำงาน"
+start = t.time()
 predict.Predict(sentence)
+print("First Prediction time :", t.time()-start)
+
 # robot.Speech.CalibrateMicNoiseThreshold()
 
 start_listen = False
