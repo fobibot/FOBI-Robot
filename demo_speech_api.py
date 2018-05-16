@@ -1,16 +1,22 @@
-# import FOBI
-# import time as t
+import Speech
+import json
+import time as t
 
-# robot = FOBI.Robot()
+def LoadJsonFile(filename):
+    try:
+        with open(filename) as json_data:
+            json_file = json.load(json_data)
+    except:
+        print("No file name", filename, ".json")
+        pass
+    return json_file
 
-# while 1:
-#     for i in range(3,0,-1):
-#         print(i)
-#         t.sleep(1)
-#     sentence = robot.Listen()
-#     print(sentence)
+NameToKeyword = LoadJsonFile('New_ML/Special_Names/NameToKeyword.json')
+Speech = Speech.Speech(list(NameToKeyword.keys()))
 
-from pythainlp.tokenize import word_tokenize
+# Speech.CalibrateMicNoiseThreshold()
 
-while 1:
-    print(word_tokenize(input("Sentence :"), engine='deepcut'))
+while True:
+    print("Listening...")
+    sentence = Speech.listen_to_gcloud()
+    t.sleep(2)

@@ -1,21 +1,23 @@
-import FOBI
-import time as t
+# import time as t
+import os
 from New_ML.Predict import Prediction
-from pythainlp.tokenize import word_tokenize
+# from pythainlp.tokenize import word_tokenize
+from deepcut import tokenize as word_tokenize
+import FOBI
 
 # start running function for the first time
 robot = FOBI.Robot()
 predict = Prediction(confidence_value = 0.77)
 sentence = "เริ่มทำงาน"
 predict.Predict(sentence)
-robot.Speech.CalibrateMicNoiseThreshold()
+# robot.Speech.CalibrateMicNoiseThreshold()
 
 start_listen = False
 
 def SecondTry(sentence):
     global start_listen
 
-    wordcut_sentence = word_tokenize(sentence, engine='deepcut')
+    wordcut_sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
     second_try_sentence = " ".join(wordcut_sentence)
     robot.SpeakAndReply(second_try_sentence)
     start_listen = False
@@ -25,7 +27,7 @@ def FindPlaceNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, engine='deepcut')
+        sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
@@ -58,7 +60,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = word_tokenize(sentence, engine='deepcut')
+        sentence = word_tokenize(sentence, custom_dict="custom_dict.txt")
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
@@ -105,22 +107,37 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
 
 while 1:
     sentence = None
-    wordcut_sentence = None
+    count_cannot_recognize_time = 0
     # if __debug__:
     #     sentence = input("Type some sentence : ") 
     # else:
     while 1:
         if not start_listen:
-            robot.Speech.waiting_for_hotword()
-            start_listen = True
+            if os.name == 'arm':
+                if robot.Motion.face_detected():
+                    start_listen = True
+            else:
+                input("Enter to listen...")
+                start_listen = True
         else:
+            if count_cannot_recognize_time == 0:
+                robot.SpeakAndReply("ทักทาย")
             print("listening...")
             sentence = robot.Speech.listen_to_gcloud()
-            if sentence != None:
+            if sentence != '' and sentence != ' ':
+                print("------ Case 1 -------")
+                start_listen = True
                 break
             else:
+                print("------ Case 2 -------")
+                if count_cannot_recognize_time >= 3:
+                    robot.SpeakAndReply("ไม่ได้พูด") # user didn't say anything
+                    start_listen = False
+                    # break
                 robot.SpeakAndReply("ไม่เข้าใจที่พูด")
+                count_cannot_recognize_time += 1
 
+    
     predicted_sentence = predict.Predict(sentence)
 
     try:

@@ -111,6 +111,8 @@ def run_session():
         sentence = input("Type some sentence : ") 
     else:
         while 1:
+            robot.SpeakAndReply("ทักทาย")
+            
             print("listening...")
             sentence = robot.Speech.listen_to_gcloud()
             if sentence != None:
