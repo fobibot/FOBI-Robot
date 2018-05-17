@@ -7,7 +7,7 @@ import FOBI
 # start running function for the first time
 
 robot = FOBI.Robot()
-predict = Prediction(confidence_value = 0.65)
+predict = Prediction(confidence_value = 0.75)
 sentence = "เริ่มทำงาน"
 predict.Predict(sentence)
 
