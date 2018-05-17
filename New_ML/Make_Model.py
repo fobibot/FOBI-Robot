@@ -89,7 +89,7 @@ model.add(Embedding(max_features, max_word_lenght))
 model.add(LSTM(max_word_lenght, dropout=0.2, recurrent_dropout=0.1, return_sequences=True))
 model.add(LSTM(max_word_lenght, dropout=0.2, recurrent_dropout=0.1))
 # model.add(Dense(max_word_lenght, activation='sigmoid'))
-model.add(Dropout(0.3))
+model.add(Dropout(0.5))
 model.add(Dense(number_of_category, activation='softmax')) #softmax used for highlight the largest values and suppress values which are significantly below the maximum value
 
 model.summary()
