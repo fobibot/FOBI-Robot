@@ -42,8 +42,6 @@ class Robot:
         self._chatter.load_directory("RiveScript")
         self._chatter.sort_replies()
 
-    # def word_tokenize(self, text):
-    #     return tokenize(text, custom_dict=self.custom_dict_dir)
         
     def LoadRobotMotion(self):
         if os_type == 'Linux': #RPi
