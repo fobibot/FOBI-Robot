@@ -77,7 +77,7 @@ class Robot:
             print("Something wrong with emotion in \'text.rive\' or \'action.py\'")
             print("Error in SpeakAndReply function : answer = ", answer[0])
             answer = answer[0]
-            emotion = "curious"
+            emotion = "normal"
             if os_type == 'Linux': #RPi
                 self.Motion.motion(emotion)
             

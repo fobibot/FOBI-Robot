@@ -140,7 +140,6 @@ while 1:
         else:
             if count_cannot_recognize_time == 0:
                 robot.SpeakAndReply("ทักทาย")
-            print("listening...")
             sentence = robot.Speech.listen_to_gcloud()
             if sentence != '' and sentence != ' ':
                 print("------ Case 1 -------")
