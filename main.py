@@ -7,7 +7,7 @@ import FOBI
 # start running function for the first time
 
 robot = FOBI.Robot()
-predict = Prediction(confidence_value = 0.75)
+predict = Prediction(confidence_value = 0.65)
 sentence = "เริ่มทำงาน"
 predict.Predict(sentence)
 
@@ -106,6 +106,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
 
     return predicted_sentence
 
+print("Ready...")
 while 1:
     sentence = None
     count_cannot_recognize_time = 0
