@@ -1,5 +1,6 @@
 # from pythainlp.tokenize import word_tokenize
-from deepcut import tokenize as word_tokenize
+# from deepcut import tokenize as word_tokenize
+from FOBI import word_tokenize
 from sklearn.preprocessing import LabelEncoder
 from keras.models import load_model
 from keras.preprocessing import sequence
@@ -11,10 +12,10 @@ from keras.models import model_from_json
 
 import os
 
-if list(os.uname())[0] == 'Linux':
-    custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
-else:
-    custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
+# if list(os.uname())[0] == 'Linux':
+#     custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
+# else:
+#     custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
 
 class Prediction:
     def __init__(self, confidence_value):
@@ -95,7 +96,7 @@ class Prediction:
 
     def Predict(self, sentence):
         last = t.time()
-        words = word_tokenize(sentence, custom_dict=custom_dict_dir) #wait for input sentence by typing
+        words = word_tokenize(sentence) #wait for input sentence by typing
         print("Word Segmentation time :", t.time()-last)
         
         last = t.time()

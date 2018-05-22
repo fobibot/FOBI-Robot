@@ -4,6 +4,7 @@ os_type = list(os.uname())[0]
 from New_ML.Predict import Prediction
 
 import FOBI
+from FOBI import word_tokenize
 # start running function for the first time
 
 robot = FOBI.Robot()
@@ -21,7 +22,7 @@ def SecondTry(sentence):
     flag_dont_run = False
     second_try_sentence = ""
 
-    wordcut_sentence = robot.word_tokenize(sentence)
+    wordcut_sentence = word_tokenize(sentence)
     for word in wordcut_sentence:
         if word == "รู้จัก" or word == "รู้จัก" or word == "รู้จัก":
             flag_dont_run = True
@@ -35,7 +36,7 @@ def FindPlaceNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     try:
-        sentence = robot.word_tokenize(sentence)
+        sentence = word_tokenize(sentence)
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):
@@ -69,7 +70,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
     _keyword = None
     _information = None
     try:
-        sentence = robot.word_tokenize(sentence)
+        sentence = word_tokenize(sentence)
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
         print("Word cut sentence :", sentence)
         for i, word in enumerate(sentence):

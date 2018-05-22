@@ -10,6 +10,11 @@ os_type = list(os.uname())[0]
 if os_type == 'Linux': #RPi
     from action import action
 
+if os_type == 'Linux': #RPi
+    custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
+else:
+    custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
+
 from rivescript import RiveScript
 
 class Robot:
@@ -34,18 +39,18 @@ class Robot:
         
         if os_type == 'Linux': #RPi
             self.Motion = action.action()
-            self.custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
-        else:
-            self.custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
-        # self.Motion.motion("sad") -> sad, happy, angry, normal, curious
+        #     self.custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
+        # else:
+        #     self.custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
+        self.Motion.motion("curious") # -> sad, happy, angry, normal, curious
 
         # Load RiveScript
         self._chatter = RiveScript(utf8=True)
         self._chatter.load_directory("RiveScript")
         self._chatter.sort_replies()
 
-    def word_tokenize(self, text):
-        return tokenize(text, custom_dict=self.custom_dict_dir)
+    # def word_tokenize(self, text):
+    #     return tokenize(text, custom_dict=self.custom_dict_dir)
         
     def LoadJsonFile(self, filename):
         try:
@@ -76,8 +81,14 @@ class Robot:
             print("Something wrong with emotion in \'text.rive\' or \'action.py\'")
             print("Error in SpeakAndReply function : answer = ", answer[0])
             answer = answer[0]
+            emotion = "curious"
+            if os_type == 'Linux': #RPi
+                self.Motion.motion(emotion)
             
         if answer == "FO BEE":
             self.Speech.Speak(answer, self.english, wait=True, robot_name=True)
         else:
             self.Speech.Speak(answer, self.thai, wait=True)
+
+def word_tokenize(text):
+    return tokenize(text, custom_dict=custom_dict_dir)
