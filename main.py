@@ -127,9 +127,6 @@ print("Ready...")
 while 1:
     sentence = None
     count_cannot_recognize_time = 0
-    # if __debug__:
-    #     sentence = input("Type some sentence : ") 
-    # else:
     while 1:
         if not start_listen:
             if os_type == 'Linux': #RPi

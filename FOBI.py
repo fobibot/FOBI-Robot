@@ -6,11 +6,10 @@ import json
 from deepcut import tokenize
 
 import Speech
+
 os_type = list(os.uname())[0]
 if os_type == 'Linux': #RPi
     from action import action
-
-if os_type == 'Linux': #RPi
     custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
 else:
     custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"

@@ -12,11 +12,6 @@ from keras.models import model_from_json
 
 import os
 
-# if list(os.uname())[0] == 'Linux':
-#     custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
-# else:
-#     custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
-
 class Prediction:
     def __init__(self, confidence_value):
         self.encoder_input = LabelEncoder()
@@ -70,31 +65,8 @@ class Prediction:
 
         return encoded_sentence
 
-    # def Predict_Manual(self, listen_func):
-    #     while 1:
-    #         sentence = input("Sentence : ")
-    #         if sentence == "1":
-    #             sentence = listen_func()
-    #             last = t.time()
-    #             words = word_tokenize(sentence, custom_dict=custom_dict_dir) #wait for input sentence by typing
-    #             print("Word Segmentation time :", t.time()-last)
-                
-    #             last = t.time()
-    #             encoded_sentence = self.TransformInputData2EncodeValue(words)
-    #             print("Encode Data time :", t.time()-last)
-
-    #             # Predict output
-    #             last = t.time()
-    #             predictions = self.model.predict(encoded_sentence).tolist()
-    #             print("Predict time :", t.time()-last)
-    #             print(predictions)
-
-    #             last = t.time()
-    #             predicted = self.encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
-    #             print("Decoded Predict time :", t.time()-last)
-    #             print(predicted)
-
     def Predict(self, sentence):
+        print("Starting Word Segmentation..")
         last = t.time()
         words = word_tokenize(sentence) #wait for input sentence by typing
         print("Word Segmentation time :", t.time()-last)
