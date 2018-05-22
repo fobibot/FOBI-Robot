@@ -49,10 +49,14 @@ class Speech():
     if os_type == 'Linux': #RPi
         def listen_to_gcloud(self, immediate=False):
             print("Listening...")
-            sentence = self.recognizer.recognize(immediate=immediate)
-            if sentence != None and sentence != '':
-                print("Google Cloud Speech thinks you said : " + sentence)
-            return sentence if (sentence != '' and sentence != None) else " "
+            try:
+                sentence = self.recognizer.recognize(immediate=immediate)
+                if sentence != None and sentence != '':
+                    print("Google Cloud Speech thinks you said : " + sentence)
+                return sentence if (sentence != '' and sentence != None) else " "
+            finally:
+                print("Some error happended with speech recognition")
+                return " "
 
     else: # osx
         def listen_to_gcloud(self, timeout=8):
