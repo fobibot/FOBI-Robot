@@ -55,7 +55,6 @@ class action:
         self.stopped = False
         self.end = False
         self._face_detected = False
-        self.speak_done = True
         self.servo = {
         'roll':{'pin':3,'min':370,'cen':305,'max':200}, #เอียงคอ    ซ้าย ขวา กลาง
         'pich':{'pin':2,'min':350,'cen':450,'max':550}, #ก้มหน้า    เงย กลาง    ก้ม
@@ -126,8 +125,6 @@ class action:
             return self
     def waitKey(self):
         return self.end
-    def speaked(self):
-        self.speak_done = True
     def stop(self):
         self.eye.EnableDisplay(False)
         self.eye.Remove()
@@ -138,7 +135,7 @@ class action:
 
 
     def motion(self,motion):
-        if motion == 'happy':
+        if motion == 'joy':
             self.servo2motion('tentacle','max')
             self.servo2motion('eyebrow','max')
         elif motion == 'sad':
@@ -148,7 +145,7 @@ class action:
         elif motion == 'angry':
             self.servo2motion('tentacle','max')
             self.servo2motion('eyebrow','min')
-        elif motion == 'curious':
+        elif motion == 'fear':
             self.servo2motion('tentacle','min')
             self.servo2motion('eyebrow','cen')
             self.servo2motion('yaw','cen',-100)
@@ -162,6 +159,7 @@ class action:
         self.eye_state = name
         self.eye_num = num
     def eye_update(self):
+        emo_time = time.time()
         emo_trig = False
         while True:
             #print(self.eye_state,self.old_eye_state)
@@ -172,8 +170,8 @@ class action:
                 #print(self.eye_state,'hhhhhhhhhhhhhhhhhhh')
                 self.eye.Emotion(self.eye_state)
                 self.old_eye_state = self.eye_state
+                emo_time = time.time()
                 emo_trig = True
-                self.speak_done = False
             if time.time() - self.eye_time > 0.1 and time.time() - self.eye_time < 0.2:
                 self.eye.Blink(self.eye_state)
                 self.eye.Blink(self.eye_state)
@@ -183,7 +181,7 @@ class action:
                 self.eye_time = time.time()
             time.sleep(0.05)
             #print(time.time() - emo_time,emo_trig)
-            if emo_trig and self.speak_done:
+            if emo_trig and time.time() - emo_time >5:
                 #print('tring')
                 self.servo2motion('yaw',self.pos)
                 self.servo2motion('pich',self.pos_y)

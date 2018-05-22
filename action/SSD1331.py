@@ -164,21 +164,21 @@ def GetRawPixelDataFromBmp24File(name):
                 byte = f.read(1)
     return data
 def Bmp2Animate():
-    emotions_name = [x for x in os.listdir('/home/pi/FOBI/action/emotions')]
+    emotions_name = [x for x in os.listdir('/home/pi/new/thesis/action/emotions')]
     emotions = dict()
     for name in emotions_name:
         data = list()
         try:
-            with open('/home/pi/FOBI/action/emotions/'+name+'/'+name+'.am', 'rb') as fp:
+            with open('/home/pi/new/thesis/action/emotions/'+name+'/'+name+'.am', 'rb') as fp:
                 data = pickle.load(fp)
         except FileNotFoundError:
-            frame_num = len([name for name in os.listdir('/home/pi/FOBI/action/emotions/'+name)])
+            frame_num = len([name for name in os.listdir('/home/pi/new/thesis/action/emotions/'+name)])
 
             for x in range(frame_num):
-                raw_balloon  = GetRawPixelDataFromBmp24File('/home/pi/FOBI/action/emotions/'+name+'/'+str(x+1)+".bmp")
+                raw_balloon  = GetRawPixelDataFromBmp24File('/home/pi/new/thesis/action/emotions/'+name+'/'+str(x+1)+".bmp")
                 data.append(UnpackRawPixelBmp24Data(raw_balloon))
-                print('/home/pi/FOBI/action/emotion','emotions/'+name+'/'+str(x+1)+".bmp")
-            with open('/home/pi/FOBI/action/emotions/'+name+'/'+name+'.am', 'wb') as fp:
+                print('/home/pi/new/thesis/action/emotion','emotions/'+name+'/'+str(x+1)+".bmp")
+            with open('/home/pi/new/thesis/action/emotions/'+name+'/'+name+'.am', 'wb') as fp:
                 pickle.dump(data, fp)
         emotions[name] = data
 

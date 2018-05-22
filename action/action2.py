@@ -1,9 +1,6 @@
 from subprocess import call
 import Adafruit_PCA9685
-if __name__ == "__main__":
-    from SSD1331 import SSD1331
-else:
-    from action.SSD1331 import SSD1331
+from SSD1331 import SSD1331
 import struct
 import sys
 import imutils
@@ -48,26 +45,22 @@ class action:
         else:
             if self._camera:
                 self.vs = WebcamVideoStream(src=0).start()
-        self.face_cascade = cv2.CascadeClassifier('/home/pi/new/thesis/action/data/lbpcascade_frontalface_improved.xml')
-        self.pos = 350
+        self.face_cascade = cv2.CascadeClassifier('/home/pi/FOBI/action/data/lbpcascade_frontalface_improved.xml')
+        self.pos = 500
         self.pos_y =450
         self.time = 0
         self.stopped = False
         self.end = False
         self._face_detected = False
-        self.speak_done = True
         self.servo = {
         'roll':{'pin':3,'min':370,'cen':305,'max':200}, #เอียงคอ    ซ้าย ขวา กลาง
         'pich':{'pin':2,'min':350,'cen':450,'max':550}, #ก้มหน้า    เงย กลาง    ก้ม
-        'yaw':{'pin':4,'min':200,'cen':350,'max':450},  #คอ     ขวา กลาง ซ้าย
-        'left_eyebrow':{'pin':1,'min':300,'cen':400,'max':500},     #คิ้วซ้าย
-        'right_eyebrow':{'pin':0,'min':500,'cen':370,'max':300},    #คิ้วขวา    ต่ำ กลาง สูง
+        'yaw':{'pin':4,'min':200,'cen':300,'max':450},  #คอ     ขวา กลาง ซ้าย
+        'left_eyebrow':{'pin':1,'min':450,'cen':550,'max':610},     #คิ้วซ้าย
+        'right_eyebrow':{'pin':0,'min':550,'cen':460,'max':400},    #คิ้วขวา
         'left_tentacle':{'pin':6,'min':400,'max':250},  #หนวดซ้าย   หย่อน   ตึง
         'right_tentacle':{'pin':7,'min':470,'max':650}, #หนวดขวา    หย่อน   ตึง
         }
-        self.servo2motion('yaw','cen')
-        self.servo2motion('roll','cen')
-        self.servo2motion('pich','cen',10)
         # self.motion('normal')
 
         time.sleep(2.0)
@@ -126,8 +119,6 @@ class action:
             return self
     def waitKey(self):
         return self.end
-    def speaked(self):
-        self.speak_done = True
     def stop(self):
         self.eye.EnableDisplay(False)
         self.eye.Remove()
@@ -138,60 +129,44 @@ class action:
 
 
     def motion(self,motion):
-        if motion == 'happy':
+        if motion == 'joy':
             self.servo2motion('tentacle','max')
             self.servo2motion('eyebrow','max')
         elif motion == 'sad':
             self.servo2motion('tentacle','min')
             self.servo2motion('eyebrow','min')
-            self.servo2motion('pich','max')
         elif motion == 'angry':
             self.servo2motion('tentacle','max')
             self.servo2motion('eyebrow','min')
-        elif motion == 'curious':
+        elif motion == 'fear':
             self.servo2motion('tentacle','min')
             self.servo2motion('eyebrow','cen')
             self.servo2motion('yaw','cen',-100)
         elif motion == 'normal':
             self.servo2motion('tentacle','min')
             self.servo2motion('eyebrow','cen')
-
+            self.servo2motion('yaw','cen')
+            self.servo2motion('roll','cen')
+            self.servo2motion('pich','cen',10)
         self.eye_motion(motion)
     def eye_motion(self,name,num=1):
-        #print('aaaadss')
         self.eye_state = name
         self.eye_num = num
     def eye_update(self):
-        emo_trig = False
         while True:
-            #print(self.eye_state,self.old_eye_state)
-            # if self.eye_state == 'sad':
-            #     self.eye.Blink(self.eye_state)
-            # else:
-            if self.eye_state != self.old_eye_state:
-                #print(self.eye_state,'hhhhhhhhhhhhhhhhhhh')
-                self.eye.Emotion(self.eye_state)
-                self.old_eye_state = self.eye_state
-                emo_trig = True
-                self.speak_done = False
-            if time.time() - self.eye_time > 0.1 and time.time() - self.eye_time < 0.2:
+            if self.eye_state == 'sad':
                 self.eye.Blink(self.eye_state)
-                self.eye.Blink(self.eye_state)
-            if time.time() - self.eye_time > 5 and time.time() - self.eye_time < 5.1:
-                self.eye.Blink(self.eye_state)
-            if time.time() - self.eye_time > 6:
-                self.eye_time = time.time()
+            else:
+                if self.eye_state != self.old_eye_state:
+                    self.eye.Emotion(self.eye_state)
+                if time.time() - self.eye_time > 0.1 and time.time() - self.eye_time < 0.2:
+                    self.eye.Blink(self.eye_state)
+                    self.eye.Blink(self.eye_state)
+                if time.time() - self.eye_time > 5 and time.time() - self.eye_time < 5.1:
+                    self.eye.Blink(self.eye_state)
+                if time.time() - self.eye_time > 6:
+                    self.eye_time = time.time()
             time.sleep(0.05)
-            #print(time.time() - emo_time,emo_trig)
-            if emo_trig and self.speak_done:
-                #print('tring')
-                self.servo2motion('yaw',self.pos)
-                self.servo2motion('pich',self.pos_y)
-                emo_time = time.time()
-                emo_trig = False
-                self.motion('normal')
-
-
     def tracking_update(self):
         while True:
             self.frame= self.vs.read()
@@ -254,24 +229,24 @@ class action:
 
 
 if __name__ == "__main__":
-    action = action(debug=True,camera=False,servo=True)
+    action = action(debug=False,camera=False,servo=False)
 
     #a = input()
     while True:
-        a = input('Motion:')
+        input('HI')
         # if fobi.waitKey():
         #     break
         #motion = input('Input:')
         #if motion == 'q':
       #      break
-        action.motion(a)
-        # time.sleep(10)
-        # action.motion('angry')
-        # time.sleep(10)
-        # action.motion('happy')
-        # time.sleep(10)
-        # action.motion('sad')
-        # time.sleep(10)
+        #action.motion('normal')
+        #time.sleep(10)
+        #action.motion('angry')
+        #time.sleep(10)
+        #action.motion('happy')
+        #time.sleep(10)
+        #action.motion('sad')
+        #time.sleep(10)
 
 
     action.stop()
