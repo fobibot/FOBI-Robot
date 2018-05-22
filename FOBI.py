@@ -85,7 +85,7 @@ class Robot:
             self.Speech.Speak(answer, self.english, wait=True, robot_name=True)
         else:
             self.Speech.Speak(answer, self.thai, wait=True)
-        self.Motion.motion.speaked()
+        self.Motion.speaked()
 
 def word_tokenize(text):
     return tokenize(text, custom_dict=custom_dict_dir)
