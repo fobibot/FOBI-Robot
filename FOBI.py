@@ -47,9 +47,9 @@ class Robot:
         
     def LoadRobotMotion(self):
         if os_type == 'Linux': #RPi
-            self.Motion = action.action(camera=False)
+            self.Motion = action.action(camera=True)
         self.Motion.motion("curious") # -> sad, happy, angry, normal, curious
-        
+
     def LoadJsonFile(self, filename):
         try:
             with open(filename) as json_data:
