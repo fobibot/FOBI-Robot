@@ -36,12 +36,6 @@ class Robot:
         # Setup Speech - Google Cloud Speech and Text to Speech
         self.Speech = Speech.Speech(list(self.NameToKeyword.keys()))
         
-        if os_type == 'Linux': #RPi
-            self.Motion = action.action()
-        #     self.custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
-        # else:
-        #     self.custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
-        self.Motion.motion("curious") # -> sad, happy, angry, normal, curious
 
         # Load RiveScript
         self._chatter = RiveScript(utf8=True)
@@ -50,6 +44,11 @@ class Robot:
 
     # def word_tokenize(self, text):
     #     return tokenize(text, custom_dict=self.custom_dict_dir)
+        
+    def LoadRobotMotion(self):
+        if os_type == 'Linux': #RPi
+            self.Motion = action.action(camera=False)
+        self.Motion.motion("curious") # -> sad, happy, angry, normal, curious
         
     def LoadJsonFile(self, filename):
         try:

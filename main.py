@@ -11,6 +11,7 @@ robot = FOBI.Robot()
 predict = Prediction(confidence_value = 0.65)
 sentence = "เริ่มทำงาน"
 predict.Predict(sentence)
+robot.LoadRobotMotion()
 
 # robot.Speech.CalibrateMicNoiseThreshold()
 
