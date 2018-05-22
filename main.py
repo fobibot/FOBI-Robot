@@ -120,6 +120,7 @@ while 1:
                     start_listen = True
             else:
                 input("Enter to listen...")
+                # sentence = input("Input Sentence :")
                 start_listen = True
         else:
             if count_cannot_recognize_time == 0:
@@ -145,7 +146,7 @@ while 1:
     try:
         _object = None
         _place = None
-        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "บุคคล":
+        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "รู้จัก":
             predicted_sentence = FindPersonNameInSentence(predicted_sentence, sentence)
             
             print("To RiveScript :", predicted_sentence)

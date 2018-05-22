@@ -11,7 +11,7 @@ if os_type == 'Linux': #RPi
     custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
 elif os_type == 'Darwin':
     import speech_recognition as sr
-    custom_dict_dir = "custom_dict.txt"
+    custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
 
 class Speech():
     def __init__(self, expect_phrase):

@@ -76,19 +76,13 @@ np.random.seed(seed)
 X_train, X_test, y_train, y_test = train_test_split(encoded_train_x_datasets, encoded_train_y_datasets, test_size=0.2, random_state=seed)
 
 # ML Model Structure
-# max_features = len(encoded_train_x_datasets)
-# model = Sequential()
-# model.add(Embedding(max_features, max_word_lenght))
-# model.add(LSTM(max_word_lenght))
-# model.add(Dropout(0.5))
-# model.add(Dense(number_of_category, activation='softmax')) #softmax used for highlight the largest values and suppress values which are significantly below the maximum value
 
 max_features = len(encoded_train_x_datasets)
 model = Sequential()
 model.add(Embedding(max_features, max_word_lenght))
-model.add(LSTM(max_word_lenght, dropout=0.2, recurrent_dropout=0.1, return_sequences=True))
-model.add(LSTM(max_word_lenght, dropout=0.2, recurrent_dropout=0.1))
-# model.add(Dense(max_word_lenght, activation='sigmoid'))
+# model.add(LSTM(max_word_lenght, return_sequences=True))
+# model.add(Dropout(0.5))
+model.add(LSTM(max_word_lenght))
 model.add(Dropout(0.5))
 model.add(Dense(number_of_category, activation='softmax')) #softmax used for highlight the largest values and suppress values which are significantly below the maximum value
 
@@ -132,14 +126,14 @@ model.compile(loss='categorical_crossentropy',
 
 model.fit(X_train, y_train, validation_split=0.2,
           batch_size=32,
-          epochs=70)
+          epochs=54)
 
-predictions = model.predict(X_test)
-pre = []
-for x in predictions:
-    pre.append(x.tolist().index(max(x)))
-for i, pred in enumerate(pre):
-    print(i, ":", pred)
+# predictions = model.predict(X_test)
+# pre = []
+# for x in predictions:
+#     pre.append(x.tolist().index(max(x)))
+# for i, pred in enumerate(pre):
+#     print(i, ":", pred)
 
 
 model.save('New_ML/Saved_Model/model.h5')

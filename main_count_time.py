@@ -154,7 +154,7 @@ while 1:
     try:
         _object = None
         _place = None
-        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "บุคคล":
+        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "รู้จัก":
             predicted_sentence = FindPersonNameInSentence(predicted_sentence, sentence)
             
             print("To RiveScript :", predicted_sentence)

@@ -14,7 +14,7 @@ import os
 if list(os.uname())[0] == 'Linux':
     custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
 else:
-    custom_dict_dir = "custom_dict.txt"
+    custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
 
 class Prediction:
     def __init__(self, confidence_value):
@@ -26,7 +26,7 @@ class Prediction:
 
         print("Loading Model..")
         self.LoadModel()
-        print("Finished Loading Model : ")
+        print("Finished Loading Model..")
 
     def LoadModel(self):
         # dataframe = pandas.read_csv("New_ML/Datasets_NewLabel.csv", header=None)
@@ -69,54 +69,50 @@ class Prediction:
 
         return encoded_sentence
 
-    def Predict_Manual(self, listen_func):
-        while 1:
-            sentence = input("Sentence : ")
-            if sentence == "1":
-                sentence = listen_func()
-                last = t.time()
-                words = word_tokenize(sentence, custom_dict=custom_dict_dir) #wait for input sentence by typing
-                print("Word Segmentation time :", t.time()-last)
+    # def Predict_Manual(self, listen_func):
+    #     while 1:
+    #         sentence = input("Sentence : ")
+    #         if sentence == "1":
+    #             sentence = listen_func()
+    #             last = t.time()
+    #             words = word_tokenize(sentence, custom_dict=custom_dict_dir) #wait for input sentence by typing
+    #             print("Word Segmentation time :", t.time()-last)
                 
-                last = t.time()
-                encoded_sentence = self.TransformInputData2EncodeValue(words)
-                print("Encode Data time :", t.time()-last)
+    #             last = t.time()
+    #             encoded_sentence = self.TransformInputData2EncodeValue(words)
+    #             print("Encode Data time :", t.time()-last)
 
-                # Predict output
-                last = t.time()
-                predictions = self.model.predict(encoded_sentence).tolist()
-                print("Predict time :", t.time()-last)
-                print(predictions)
+    #             # Predict output
+    #             last = t.time()
+    #             predictions = self.model.predict(encoded_sentence).tolist()
+    #             print("Predict time :", t.time()-last)
+    #             print(predictions)
 
-                last = t.time()
-                predicted = self.encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
-                print("Decoded Predict time :", t.time()-last)
-                print(predicted)
+    #             last = t.time()
+    #             predicted = self.encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
+    #             print("Decoded Predict time :", t.time()-last)
+    #             print(predicted)
 
     def Predict(self, sentence):
         last = t.time()
         words = word_tokenize(sentence, custom_dict=custom_dict_dir) #wait for input sentence by typing
-        if __debug__:
-            print("Word Segmentation time :", t.time()-last)
+        print("Word Segmentation time :", t.time()-last)
         
         last = t.time()
         encoded_sentence = self.TransformInputData2EncodeValue(words)
-        if __debug__:
-            print("Encode Data time :", t.time()-last)
+        print("Encode Data time :", t.time()-last)
 
         # Predict output
         last = t.time()
         predictions = self.model.predict(encoded_sentence).tolist()
-        if __debug__:
-            print("Predict time :", t.time()-last)
-            print("Prediction Score", predictions)
-            print("Max Prediction Score", max(predictions[0]))
+        print("Predict time :", t.time()-last)
+        print("Prediction Score", predictions)
+        print("Max Prediction Score", max(predictions[0]))
 
         last = t.time()
         predicted = self.encoder_output.inverse_transform([predictions[0].index(max(predictions[0]))])
-        if __debug__:
-            print("Decoded Predict time :", t.time()-last)
-            print("Predicted as : ", predicted) if max(predictions[0]) >= self.confidence_value else print("Predicted as : Low Confidence")
+        print("Decoded Predict time :", t.time()-last)
+        print("Predicted as : ", predicted) if max(predictions[0]) >= self.confidence_value else print("Predicted as : Low Confidence")
 
         return predicted[0] if max(predictions[0]) >= self.confidence_value else None # Prediction threshold >= 0.75 or 75%
 

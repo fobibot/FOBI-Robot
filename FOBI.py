@@ -36,7 +36,7 @@ class Robot:
             self.Motion = action.action()
             self.custom_dict_dir = "/home/pi/new/thesis/custom_dict.txt"
         else:
-            self.custom_dict_dir = "custom_dict.txt"
+            self.custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
         # self.Motion.motion("sad") -> sad, happy, angry, normal, curious
 
         # Load RiveScript
