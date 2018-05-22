@@ -72,7 +72,7 @@ class Robot:
             answer = answer[0]
             if os_type == 'Linux': #RPi
                 self.Motion.motion(emotion)
-            print("Robot Feeling is", emotion)
+            print("Robot is Feeling", emotion)
         except IndexError:
             print("Something wrong with emotion in \'text.rive\' or \'action.py\'")
             print("Error in SpeakAndReply function : answer = ", answer[0])

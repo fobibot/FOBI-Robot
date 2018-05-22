@@ -104,7 +104,7 @@ class Speech():
                 cmd += ['speed', '1.3']
             else:
                 cmd += ['speed', '1.0']
-        print(cmd)
+        # print(cmd)
         self.speaker = self._create_task(cmd=cmd)
         if wait:
             self.speaker.wait()
