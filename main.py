@@ -18,8 +18,15 @@ start_listen = False
 def SecondTry(sentence):
     global start_listen
 
+    flag_dont_run = False
+    second_try_sentence = ""
+
     wordcut_sentence = robot.word_tokenize(sentence)
-    second_try_sentence = " ".join(wordcut_sentence)
+    for word in wordcut_sentence:
+        if word == "รู้จัก" or word == "รู้จัก" or word == "รู้จัก":
+            flag_dont_run = True
+    if not flag_dont_run:
+        second_try_sentence = " ".join(wordcut_sentence)
     robot.SpeakAndReply(second_try_sentence)
     start_listen = False
 
@@ -60,6 +67,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
     _object = None
     _place = None
     _keyword = None
+    _information = None
     try:
         sentence = robot.word_tokenize(sentence)
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
@@ -78,16 +86,24 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
 
         if _object != None:
             print("-------------- Case 2 --------------")
-            predicted_sentence += " " + _object + " " + _place
+            if predicted_sentence == "รู้จัก":
+                _information = robot.PeopleInformation[_type][_object]["information"][0]
+                predicted_sentence += " " + _object + " " + _information
+            else:
+                predicted_sentence += " " + _object + " " + _place
         else:
             for i, word in enumerate(sentence):
-                if word in list(robot.NameToKeyword.keys()): # try to find fibo names in collected data
+                if word in list(robot.NameToKeyword.keys()): # try to find fibolian names in collected data
                     print("-------------- Case 3 --------------")
                     try:
                         _keyword = word
                         _type, _object = robot.NameToKeyword[_keyword]
                         _place = robot.PeopleInformation[_type][_object]["room"][0] # choose first room in the list -> shown that person always there
-                        predicted_sentence += " " + _object + " " + _place
+                        if predicted_sentence == "รู้จัก":
+                            _information = robot.PeopleInformation[_type][_object]["information"][0]
+                            predicted_sentence += " " + _object + " " + _information
+                        else:
+                            predicted_sentence += " " + _object + " " + _place
                     except (NameError, KeyError):
                         print("*"*5, "Found some error in file \'PeopleInformation.json\' or Cannot Detect Person", "*"*5)
                         pass
@@ -146,7 +162,7 @@ while 1:
     try:
         _object = None
         _place = None
-        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "สถานที่-คน" or predicted_sentence == "รู้จัก":
+        if predicted_sentence == "ข้อมูล-คน" or predicted_sentence == "รู้จัก":
             predicted_sentence = FindPersonNameInSentence(predicted_sentence, sentence)
             
             print("To RiveScript :", predicted_sentence)
