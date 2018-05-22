@@ -1,6 +1,6 @@
 import json
 
-import os
+import os, sys
 from subprocess import PIPE, Popen
 
 os_type = list(os.uname())[0]
@@ -52,8 +52,9 @@ class Speech():
                 if sentence != None and sentence != '':
                     print("Google Cloud Speech thinks you said : " + sentence)
                 return sentence if (sentence != '' and sentence != None) else " "
-            finally:
-                print("Some error happended with speech recognition")
+            except:
+                print("Unexpected error:", sys.exc_info()[0])
+                # raise
                 return " "
 
     else: # osx
