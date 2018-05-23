@@ -103,11 +103,11 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
                         _keyword = word
                         _type, _object = robot.NameToKeyword[_keyword]
                         _place = robot.PeopleInformation[_type][_object]["room"][0] # choose first room in the list -> shown that person always there
-                        if predicted_sentence == "รู้จัก" and not flag_cannot_find_person_identity:
-                            _information = robot.PeopleInformation[_type][_object]["information"][0]
-                            predicted_sentence += " " + _object + " " + _information
-                        else:
-                            predicted_sentence += " " + _object + " " + _place
+                        # if predicted_sentence == "รู้จัก" and not flag_cannot_find_person_identity:
+                        #     _information = robot.PeopleInformation[_type][_object]["information"][0]
+                        #     predicted_sentence += " " + _object + " " + _information
+                        # else:
+                        predicted_sentence += " " + _object + " " + _place
                     except (NameError, KeyError):
                         print("*"*5, "Found some error in file \'PeopleInformation.json\' or Cannot Detect Person", "*"*5)
                         pass
