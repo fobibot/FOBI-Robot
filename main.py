@@ -70,6 +70,7 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
     _place = None
     _keyword = None
     _information = None
+    flag_cannot_find_person_identity = False
     try:
         sentence = word_tokenize(sentence)
         sentence = [x for x in sentence if x != ' '] # remove all blank spaces
@@ -83,12 +84,13 @@ def FindPersonNameInSentence(predicted_sentence, sentence):
                     _place = robot.PeopleInformation[_type][_object]["room"][0] # choose first room in the list -> shown that person always there
                 except (NameError, KeyError):
                     print("*"*5, "Found some error in file \'PeopleInformation.json\' or Cannot Detect Person", "*"*5)
+                    flag_cannot_find_person_identity = True
                     pass
                 break # i'm not sure, will this work?
 
         if _object != None:
             print("-------------- Case 2 --------------")
-            if predicted_sentence == "รู้จัก":
+            if predicted_sentence == "รู้จัก" and not flag_cannot_find_person_identity:
                 _information = robot.PeopleInformation[_type][_object]["information"][0]
                 predicted_sentence += " " + _object + " " + _information
             else:
