@@ -12,7 +12,7 @@ if os_type == 'Linux': #RPi
     from action import action
     custom_dict_dir = "/home/pi/thesis/custom_dict.txt"
 else:
-    custom_dict_dir = "/Users/arsapol/thesis/custom_dict.txt"
+    custom_dict_dir = "/Users/arsapol/new_update/custom_dict.txt"
 
 from rivescript import RiveScript
 
@@ -46,7 +46,7 @@ class Robot:
     def LoadRobotMotion(self):
         if os_type == 'Linux': #RPi
             self.Motion = action.action(camera=True)
-        self.Motion.motion("normal") # -> sad, happy, angry, normal, curious
+            self.Motion.motion("normal") # -> sad, happy, angry, normal, curious
 
     def LoadJsonFile(self, filename):
         try:
@@ -87,7 +87,8 @@ class Robot:
             self.Speech.Speak(answer, self.english, wait=True, robot_name=True)
         else:
             self.Speech.Speak(answer, self.thai, wait=True)
-        self.Motion.speaked()
+        if os_type == 'Linux': #RPi
+            self.Motion.speaked()
 
 def word_tokenize(text):
     return tokenize(text, custom_dict=custom_dict_dir)
