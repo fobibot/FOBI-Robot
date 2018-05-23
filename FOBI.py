@@ -80,6 +80,8 @@ class Robot:
             answer = answer.split(',')
             emotion = answer[1]
             answer = answer[0]
+            if os_type == 'Linux': #RPi
+                self.Motion.motion(emotion)
             
         if answer == "FO BEE":
             self.Speech.Speak(answer, self.english, wait=True, robot_name=True)
