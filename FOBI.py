@@ -65,7 +65,7 @@ class Robot:
 
     def SpeakAndReply(self, text):
         answer = self._chatter.reply("localuser", text)
-        print("Input", text, ":", answer)
+        print("Input", text, "---", answer)
         try:
             answer = answer.split(',')
             emotion = answer[1]

@@ -25,7 +25,7 @@ def SecondTry(sentence):
 
     wordcut_sentence = word_tokenize(sentence)
     for word in wordcut_sentence:
-        if word == "รู้จัก" or word == "รู้จัก" or word == "รู้จัก":
+        if word == "รู้จัก" or word == "สถานที่-สถานที่" or word == "ข้อมูล-คน":
             flag_dont_run = True
     if not flag_dont_run:
         second_try_sentence = " ".join(wordcut_sentence)
