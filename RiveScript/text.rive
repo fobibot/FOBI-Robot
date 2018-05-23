@@ -5,17 +5,24 @@
 - ผมชื่อ <bot name> ,normal
 
 + ข้อมูล-คน * *
-- ติดต่ออาจารย์ <star1> ได้ที่ <star2> ,happy
-- ปกติแล้ว อาจารย์ <star1> อยู่ที่ <star2> ,happy
+- ติดต่ออาจารย์ <star1> ได้ที่ <star2> ,happy1
+- ติดต่ออาจารย์ <star1> ได้ที่ <star2> ,happy2
+- ปกติแล้ว อาจารย์ <star1> อยู่ที่ <star2> ,happy1
+- ปกติแล้ว อาจารย์ <star1> อยู่ที่ <star2> ,happy2
 
 + สถานที่-สถานที่ * *
-- <star1> <star2>ครับ ,happy
-- <star1> หรอ <star2>ครับ ,happy
+- <star1> <star2>ครับ ,happy1
+- <star1> <star2>ครับ ,happy2
+- <star1> หรอ <star2>ครับ ,happy1
+- <star1> หรอ <star2>ครับ ,happy2
 
 + รู้จัก * *
-- อาจารย์<star1> <star2>ครับ ,happy
-- รู้สิครับ แหม่ อาจารย์<star1> <star2>ครับ ,happy
-- ทำไมจะไม่รู้จักล่ะครับ อาจารย์<star1> <star2>ครับ ,happy
+- อาจารย์<star1> <star2>ครับ ,happy1
+- อาจารย์<star1> <star2>ครับ ,happy2
+- รู้สิครับ แหม่ อาจารย์<star1> <star2>ครับ ,happy1
+- รู้สิครับ แหม่ อาจารย์<star1> <star2>ครับ ,happy2
+- ทำไมจะไม่รู้จักล่ะครับ อาจารย์<star1> <star2>ครับ ,happy1
+- ทำไมจะไม่รู้จักล่ะครับ อาจารย์<star1> <star2>ครับ ,happy2
 
 + ไม่รู้จักคน *
 - ขอโทษครับผมไม่รู้จักคนชื่อ <star1>ครับ ,sad
