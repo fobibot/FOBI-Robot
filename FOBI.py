@@ -76,11 +76,10 @@ class Robot:
         except IndexError:
             print("Something wrong with emotion in \'text.rive\' or \'action.py\'")
             print("Error in SpeakAndReply function : answer = ", answer[0])
-            answer = " "
-            # answer = answer[0]
-            # emotion = "normal"
-            # if os_type == 'Linux': #RPi
-            #     self.Motion.motion(emotion)
+            answer = self._chatter.reply("localuser", "ไม่เข้าใจที่พูด")
+            answer = answer.split(',')
+            emotion = answer[1]
+            answer = answer[0]
             
         if answer == "FO BEE":
             self.Speech.Speak(answer, self.english, wait=True, robot_name=True)
